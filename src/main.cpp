@@ -19,10 +19,9 @@ void initialize() {
 	pros::lcd::register_btn0_cb(leftBtn);
 	pros::lcd::register_btn1_cb(centerBtn);
 	pros::lcd::register_btn2_cb(rightBtn);
-  autonSelector();
 
 
-	//autonSelector();
+	autonSelector();
 }
 
 void disabled() {}
