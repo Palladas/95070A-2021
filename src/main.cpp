@@ -69,10 +69,10 @@ void opcontrol() {
 		double power = control.get_analog(ANALOG_LEFT_Y);
 		double turn = control.get_analog(ANALOG_LEFT_X);
 		driverControl(2*power+turn, 2*power-turn);
-		if (A.changedToPressed()){
+		if (up.changedToPressed()){
 			Clamp.move_absolute(800, 100);
 		}
-		if (B.changedToPressed()){
+		if (down.changedToPressed()){
 			Clamp.move_absolute(0, 100);
 		}
     if (RUp.changedToPressed() && goalHeight < NUM_HEIGHTS - 1) {
