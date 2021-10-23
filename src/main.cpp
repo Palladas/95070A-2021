@@ -1,5 +1,5 @@
-#include "main.h"
-#include  "autonomous.h"
+#include "../include/main.h"
+#include  "../include/autonomous.h"
 
 
 
@@ -19,9 +19,10 @@ void initialize() {
 	pros::lcd::register_btn0_cb(leftBtn);
 	pros::lcd::register_btn1_cb(centerBtn);
 	pros::lcd::register_btn2_cb(rightBtn);
+	Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
+  autonSelector();
 
-
-	autonSelector();
+	//autonSelector();
 }
 
 void disabled() {}
@@ -53,23 +54,40 @@ void autonomous() {
 
 const int NUM_HEIGHTS = 3;
 const int height1 = 0;
-const int height2 = 50;
-const int height3 = 100;
+const int height2 = 700;
+const int height3 = 1500;
 
 
 const int heights[NUM_HEIGHTS] = {height1, height2,height3};
+const int heights2[NUM_HEIGHTS] = {0, 700,1800};
 
 
 void opcontrol() {
+	Clamp.tare_position();
   int goalHeight = 0;
   while (true){
-    drive->getModel()->arcade(master.getAnalog(ControllerAnalog::leftY),master.getAnalog(ControllerAnalog::leftX));
+		double power = control.get_analog(ANALOG_LEFT_Y);
+		double turn = control.get_analog(ANALOG_LEFT_X);
+		driverControl(2*power+turn, 2*power-turn);
+		if (A.changedToPressed()){
+			Clamp.move_absolute(800, 100);
+		}
+		if (B.changedToPressed()){
+			Clamp.move_absolute(0, 100);
+		}
     if (RUp.changedToPressed() && goalHeight < NUM_HEIGHTS - 1) {
       goalHeight++;
       liftControl->setTarget(heights[goalHeight]);
     } else if (RDown.changedToPressed() && goalHeight > 0) {
       goalHeight--;
       liftControl->setTarget(heights[goalHeight]);
+    }
+		if (LUp.changedToPressed() && goalHeight < NUM_HEIGHTS - 1) {
+      goalHeight++;
+      fourbar->setTarget(heights2[goalHeight]);
+    } else if (LDown.changedToPressed() && goalHeight > 0) {
+      goalHeight--;
+      fourbar->setTarget(heights2[goalHeight]);
     }
     pros::delay(20);
   }

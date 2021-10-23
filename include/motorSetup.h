@@ -1,27 +1,28 @@
-#include "main.h"
+#include "../include/main.h"
 
-
+using namespace pros;
 
 const double ticksPerDeg = 900/360;
 //200*4.125*pi/60 * sqrt(2), = 60
 const double robotSpeed = 43.196 * sqrt(2);
 const double rotationSpeed = 200;
 
-extern Motor FrontLeft;
-extern Motor FrontRight;
-extern Motor BackLeft;
-extern Motor BackRight;
-extern Motor LeftIntake;
-extern Motor RightIntake;
+extern pros::Motor FrontLeft;
+extern pros::Motor FrontRight;
+extern pros::Motor BackLeft;
+extern pros::Motor BackRight;
+
 
 //Ports
-const int FLPort = 1;
-const int FRPort = 4;
-const int BLPort = 16;
-const int BRPort = 20;
-const int PBPort = 8;
+const int FLPort = 3;
+const int FRPort = 7;
+const int BLPort = 11;
+const int BRPort = 5;
+const int PBPort = 10;
+const int FBRPort = 8;
+const int FBLPort = 9;
+const int CPort = 12;
 
-Controller master;
 
 pros::Controller control (pros::E_CONTROLLER_MASTER);
 
@@ -38,11 +39,13 @@ ControllerButton right(ControllerDigital::right);
 ControllerButton up(ControllerDigital::up);
 ControllerButton down(ControllerDigital::down);
 /*
-pros::Controller control (E_CONTROLLER_MASTER);
+pros::Controller control (E_CONTROLLER_MASTER);*/
+pros::Motor Clamp(CPort, false);
+
 pros::Motor FrontLeft(FLPort, true);
-pros::Motor FrontRight(FRPort, true);
+pros::Motor FrontRight(FRPort, false);
 pros::Motor BackLeft(BLPort, true);
-pros::Motor BackRight(BRPort, false);
+pros::Motor BackRight(BRPort, false);/*
 pros::Motor LeftIntake(LIPort, false);
 pros::Motor RightIntake(RIPort, true);
 pros::Motor BackRoller(LRPort, true);

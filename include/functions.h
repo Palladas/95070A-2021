@@ -1,7 +1,7 @@
-#include "main.h"
-#include "motorSetup.h"
+#include "../include/main.h"
+#include "../include/motorSetup.h"
 
-
+okapi::Controller master;
 //Useful Constants
 const double wheelCircumfrence = 2.75 * M_PI;
 
@@ -30,6 +30,15 @@ void autonSelector(){
    }
    slctEnd:
    master.rumble("..");
+}
+
+void driverControl(double l, double r){
+  //Calculates speed of wheels for driver control
+
+	FrontLeft.move_velocity(l);
+	FrontRight.move_velocity(r);
+	BackLeft.move_velocity(l);
+	BackRight.move_velocity(r);
 }
 /*
 //For debugging things
