@@ -66,10 +66,16 @@ const int heights2[NUM_HEIGHTS] = {0, 700,1800};
 void opcontrol() {
 	Clamp.tare_position();
   int goalHeight = 0;
+	double prevl = 0;
+	double prevr = 0;
   while (true){
 		double power = control.get_analog(ANALOG_LEFT_Y);
 		double turn = control.get_analog(ANALOG_LEFT_X);
-		driverControl(2*power+turn, 2*power-turn);
+		double left = (2*power + turn + prevl)/2;
+		double right = (2*power - turn + prevr)/2;
+		prevr = right;
+		prevl = left;
+		driverControl(prevl, prevr);
 		if(A.changedToPressed()) {
 			skills();
 		}
