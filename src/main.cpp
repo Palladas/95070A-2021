@@ -70,11 +70,11 @@ void opcontrol() {
   while (true){
 		double power = control.get_analog(ANALOG_LEFT_Y);
 		double turn = control.get_analog(ANALOG_LEFT_X);
-		double right = (2*power + turn + prevr)/2;
-		double left = (2*power - turn + prevr)/2;
+		double left = (2*power + turn + prevl)/2;
+		double right = (2*power - turn + prevr)/2;
 		prevr = right;
 		prevl = left;
-		driverControl(prevr, 2*power-turn);
+		driverControl(prevl, prevr);
 		if (up.changedToPressed()){
 			Clamp.move_absolute(800, 100);
 		}
