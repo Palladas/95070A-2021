@@ -66,8 +66,8 @@ const int heights2[NUM_HEIGHTS] = {0, 700,1800};
 void opcontrol() {
 	Clamp.tare_position();
   int goalHeight = 0;
-	double prevl = 0;
 	double prevr = 0;
+	double prevl = 0;
   while (true){
 		double power = control.get_analog(ANALOG_LEFT_Y);
 		double turn = control.get_analog(ANALOG_LEFT_X);
