@@ -1,6 +1,7 @@
 #include "../include/main.h"
 #include  "../include/autonomous.h"
 
+
 void leftBtn(){
 
 }
@@ -69,6 +70,9 @@ void opcontrol() {
 		double power = control.get_analog(ANALOG_LEFT_Y);
 		double turn = control.get_analog(ANALOG_LEFT_X);
 		driverControl(2*power+turn, 2*power-turn);
+		if(A.changedToPressed()) {
+			skills();
+		}
 		if (up.changedToPressed()){
 			Clamp.move_absolute(800, 100);
 		}
@@ -86,7 +90,7 @@ void opcontrol() {
       fourbarmove(200);
 
     } else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
-      fourbarmove(-200);
+      fourbarmove(-86);
     } else {
 			fourbarmove(0);
 		}
