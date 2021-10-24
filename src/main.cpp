@@ -20,6 +20,8 @@ void initialize() {
 	pros::lcd::register_btn1_cb(centerBtn);
 	pros::lcd::register_btn2_cb(rightBtn);
 	Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
+	FBarL.set_brake_mode(MOTOR_BRAKE_HOLD);
+	FBarR.set_brake_mode(MOTOR_BRAKE_HOLD);
   autonSelector();
 
 	//autonSelector();
@@ -67,6 +69,7 @@ void opcontrol() {
 	Clamp.tare_position();
   int goalHeight = 0;
   while (true){
+		fourbarmove(0);
 		double power = control.get_analog(ANALOG_LEFT_Y);
 		double turn = control.get_analog(ANALOG_LEFT_X);
 		driverControl(2*power+turn, 2*power-turn);
@@ -83,12 +86,11 @@ void opcontrol() {
       goalHeight--;
       liftControl->setTarget(heights[goalHeight]);
     }
-		if (LUp.changedToPressed() && goalHeight < NUM_HEIGHTS - 1) {
-      goalHeight++;
-      fourbar->setTarget(heights2[goalHeight]);
-    } else if (LDown.changedToPressed() && goalHeight > 0) {
-      goalHeight--;
-      fourbar->setTarget(heights2[goalHeight]);
+		if (control.get_digital(E_CONTROLLER_DIGITAL_L1)) {
+      fourbarmove(200);
+
+    } else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
+      fourbarmove(-200);
     }
     pros::delay(20);
   }

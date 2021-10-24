@@ -32,8 +32,6 @@ ControllerButton A(ControllerDigital::A);
 ControllerButton B(ControllerDigital::B);
 ControllerButton X(ControllerDigital::X);
 ControllerButton Y(ControllerDigital::Y);
-ControllerButton LUp(ControllerDigital::L1);
-ControllerButton LDown(ControllerDigital::L2);
 ControllerButton left(ControllerDigital::left);
 ControllerButton right(ControllerDigital::right);
 ControllerButton up(ControllerDigital::up);
@@ -45,7 +43,11 @@ pros::Motor Clamp(CPort, false);
 pros::Motor FrontLeft(FLPort, true);
 pros::Motor FrontRight(FRPort, false);
 pros::Motor BackLeft(BLPort, true);
-pros::Motor BackRight(BRPort, false);/*
+pros::Motor BackRight(BRPort, false);
+pros::Motor FBarR(FBRPort, false);
+pros::Motor FBarL(FBLPort, true);
+
+/*
 pros::Motor LeftIntake(LIPort, false);
 pros::Motor RightIntake(RIPort, true);
 pros::Motor BackRoller(LRPort, true);
