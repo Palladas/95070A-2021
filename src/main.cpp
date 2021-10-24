@@ -1,9 +1,6 @@
 #include "../include/main.h"
 #include  "../include/autonomous.h"
 
-
-
-
 void leftBtn(){
 
 }
@@ -69,7 +66,6 @@ void opcontrol() {
 	Clamp.tare_position();
   int goalHeight = 0;
   while (true){
-		fourbarmove(0);
 		double power = control.get_analog(ANALOG_LEFT_Y);
 		double turn = control.get_analog(ANALOG_LEFT_X);
 		driverControl(2*power+turn, 2*power-turn);
@@ -91,7 +87,9 @@ void opcontrol() {
 
     } else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
       fourbarmove(-200);
-    }
+    } else {
+			fourbarmove(0);
+		}
     pros::delay(20);
   }
 }
