@@ -1,6 +1,7 @@
 #include "../include/main.h"
 #include  "../include/autonomous.h"
 
+
 void leftBtn(){
 
 }
@@ -95,7 +96,7 @@ void opcontrol() {
       fourbarmove(200);
 
     } else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
-      fourbarmove(-200);
+      fourbarmove(-86);
     } else {
 			fourbarmove(0);
 		}
