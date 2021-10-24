@@ -75,6 +75,9 @@ void opcontrol() {
 		prevr = right;
 		prevl = left;
 		driverControl(prevl, prevr);
+		if(A.changedToPressed()) {
+			skills();
+		}
 		if (up.changedToPressed()){
 			Clamp.move_absolute(800, 100);
 		}
