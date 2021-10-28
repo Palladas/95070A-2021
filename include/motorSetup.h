@@ -38,7 +38,7 @@ ControllerButton up(ControllerDigital::up);
 ControllerButton down(ControllerDigital::down);
 /*
 pros::Controller control (E_CONTROLLER_MASTER);*/
-pros::Motor Clamp(CPort, false);
+pros::Motor Clamp(CPort, E_MOTOR_GEARSET_36, false);
 
 pros::Motor FrontLeft(FLPort, true);
 pros::Motor FrontRight(FRPort, false);
