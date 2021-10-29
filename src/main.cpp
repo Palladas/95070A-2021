@@ -84,10 +84,10 @@ void opcontrol() {
 		prevl = (left+prevl)/2;
 		driverControl(prevl, prevr);
 		if (up.changedToPressed()){
-			Clamp.move_absolute(800, 100);
+			Clamp.move(100);
 		}
 		if (down.changedToPressed()){
-			Clamp.move_absolute(0, 100);
+			Clamp.move(-100);
 		}
     if (RUp.changedToPressed() && goalHeight < NUM_HEIGHTS - 1) {
       goalHeight++;
