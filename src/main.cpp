@@ -64,30 +64,26 @@ const int heights2[NUM_HEIGHTS] = {0, 700,1800};
 
 
 void opcontrol() {
-	Clamp.tare_position();
+	master.clear();
+	Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
+	FBarL.set_brake_mode(MOTOR_BRAKE_HOLD);
+	FBarR.set_brake_mode(MOTOR_BRAKE_HOLD);
   int goalHeight = 0;
 	double prevr = 0;
 	double prevl = 0;
   while (true){
-		master.clear();
-		std::string fl = std::to_string(FrontLeft.get_temperature());
-		control.print(1,1, fl.c_str());
-		std::string fr = std::to_string(FrontRight.get_temperature());
-		control.print(1,2, fl.c_str());
-		std::string bl = std::to_string(BackLeft.get_temperature());
-		control.print(2,1, fl.c_str());
-		std::string br = std::to_string(BackRight.get_temperature());
-		control.print(2,2, fl.c_str());
-		double left = control.get_analog(ANALOG_LEFT_Y);
-		double right = control.get_analog(ANALOG_RIGHT_Y);
-		prevr = (right+prevr)/2;
-		prevl = (left+prevl)/2;
-		driverControl(prevl, prevr);
-		if (up.changedToPressed()){
+		double power = control.get_analog(ANALOG_LEFT_Y);
+		double turn = control.get_analog(ANALOG_LEFT_X);
+		driverControl(2*power+turn, 2*power - turn);
+		if (control.get_digital(E_CONTROLLER_DIGITAL_X)){
 			Clamp.move(100);
 		}
-		if (down.changedToPressed()){
+		else if (control.get_digital(E_CONTROLLER_DIGITAL_B)){
 			Clamp.move(-100);
+		}
+		else{
+			Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
+			Clamp.move_velocity(0);
 		}
     if (RUp.changedToPressed() && goalHeight < NUM_HEIGHTS - 1) {
       goalHeight++;
@@ -102,6 +98,8 @@ void opcontrol() {
     } else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
       fourbarmove(-86);
     } else {
+			FBarL.set_brake_mode(MOTOR_BRAKE_HOLD);
+			FBarR.set_brake_mode(MOTOR_BRAKE_HOLD);
 			fourbarmove(0);
 		}
     pros::delay(20);
