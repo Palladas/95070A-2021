@@ -42,8 +42,8 @@ void driverControl(double l, double r){
 }
 
 void fourbarmove(double speed){
-  FBarR.move(speed);
-  FBarL.move(speed);
+  FBarR.move_velocity(speed);
+  FBarL.move_velocity(speed);
 }
 /*
 //For debugging things
