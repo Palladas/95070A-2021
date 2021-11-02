@@ -36,7 +36,7 @@ void autonomous() {
      case 1:
 		 	pop();
      case 2:
-
+		 REDX();
      case 3:
 
      case 4:
@@ -48,7 +48,7 @@ void autonomous() {
      case 7:
 
 		 case 8:
-     	skills();
+		 	skills();
    }
 }
 
@@ -81,9 +81,15 @@ void opcontrol() {
 		else if (control.get_digital(E_CONTROLLER_DIGITAL_B)){
 			Clamp.move(-100);
 		}
+		else if(control.get_digital(E_CONTROLLER_DIGITAL_Y)){
+			Clamp.move_absolute(0,100);
+		}
 		else{
 			Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
 			Clamp.move_velocity(0);
+		}
+		if (control.get_digital(E_CONTROLLER_DIGITAL_UP)){
+			autonomous();
 		}
     if (RUp.changedToPressed() && goalHeight < NUM_HEIGHTS - 1) {
       goalHeight++;
