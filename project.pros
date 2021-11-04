@@ -309,7 +309,7 @@
             "compress_bin": true,
             "description": "dumb",
             "remote_name": "Template-PROS",
-            "slot": 3
+            "slot": 1
         }
     }
 }
