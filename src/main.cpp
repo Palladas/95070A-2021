@@ -61,10 +61,19 @@ const int height3 = 1500;
 const int heights[NUM_HEIGHTS] = {height1, height2,height3};
 const int heights2[NUM_HEIGHTS] = {0, 700,1800};
 
+int x = 0;
+
+void my_task_fn(void* param) {
+		std::string flt =std::to_string( FrontLeft.get_temperature());
+		control.print(2, 1, flt.c_str());
+		delay(200);
+		// ...
+}
 
 
 void opcontrol() {
 	master.clear();
+	control.clear();
 	Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
 	FBarL.set_brake_mode(MOTOR_BRAKE_HOLD);
 	FBarR.set_brake_mode(MOTOR_BRAKE_HOLD);
@@ -72,6 +81,8 @@ void opcontrol() {
 	double prevr = 0;
 	double prevl = 0;
   while (true){
+		Task my_task(my_task_fn);
+		x+=1;
 		double power = control.get_analog(ANALOG_LEFT_Y);
 		double turn = control.get_analog(ANALOG_LEFT_X);
 		driverControl(2*power+turn, 2*power - turn);
