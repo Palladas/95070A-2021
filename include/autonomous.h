@@ -21,7 +21,7 @@ void REDX(){
   ChassisControllerBuilder()
 .withMotors({FLPort,BLPort},{FRPort,BRPort})
 .withGains(
-{0.001, 0, 0.0001}, // Distance controller gains
+{0.0025, 0, 0.0001}, // Distance controller gains
 {0.001, 0, 0.0001} // Turn controller gains
  )
 // green gearset, 4 inch wheel diameter, 11.5 inch wheel track
@@ -33,7 +33,7 @@ void REDX(){
 driveauton->moveDistance(40_in);
 Clamp.move_relative(1000, 100);
 delay(1000);
-driveauton->moveDistance(-30_in);
+driveauton->moveDistance(-40_in);
 
 }
 void skills(){

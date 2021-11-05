@@ -64,8 +64,8 @@ const int heights2[NUM_HEIGHTS] = {0, 700,1800};
 int x = 0;
 
 void my_task_fn(void* param) {
-		std::string flt =std::to_string( FrontLeft.get_temperature());
-		control.print(2, 1, flt.c_str());
+	std::string t =std::to_string( (FrontLeft.get_temperature()+FrontRight.get_temperature()+BackLeft.get_temperature()+BackRight.get_temperature())/4);
+	control.print(1, 1, t.c_str());
 		delay(200);
 		// ...
 }
@@ -93,7 +93,7 @@ void opcontrol() {
 			Clamp.move(-100);
 		}
 		else if(control.get_digital(E_CONTROLLER_DIGITAL_Y)){
-			Clamp.move_absolute(0,100);
+			Clamp.move_absolute(0,-100);
 		}
 		else{
 			Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
