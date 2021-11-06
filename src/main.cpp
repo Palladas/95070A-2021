@@ -82,7 +82,6 @@ void opcontrol() {
 	double prevl = 0;
   while (true){
 		Task my_task(my_task_fn);
-		x+=1;
 		double power = control.get_analog(ANALOG_LEFT_Y);
 		double turn = control.get_analog(ANALOG_LEFT_X);
 		driverControl(2*power+turn, 2*power - turn);
@@ -98,9 +97,6 @@ void opcontrol() {
 		else{
 			Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
 			Clamp.move_velocity(0);
-		}
-		if (control.get_digital(E_CONTROLLER_DIGITAL_UP)){
-			autonomous();
 		}
     if (RUp.changedToPressed() && goalHeight < NUM_HEIGHTS - 1) {
       goalHeight++;
