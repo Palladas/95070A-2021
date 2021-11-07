@@ -2,6 +2,7 @@
 #include  "../include/autonomous.h"
 
 
+
 void leftBtn(){
 
 }
@@ -38,7 +39,7 @@ void autonomous() {
      case 2:
 		 REDX();
      case 3:
-
+		 REDY();
      case 4:
 
      case 5:
@@ -64,7 +65,7 @@ const int heights2[NUM_HEIGHTS] = {0, 700,1800};
 int x = 0;
 
 void my_task_fn(void* param) {
-	std::string t =std::to_string( (FrontLeft.get_temperature()+FrontRight.get_temperature()+BackLeft.get_temperature()+BackRight.get_temperature())/4);
+	std::string t =std::to_string( (FrontLeft.get_temperature()));
 	control.print(1, 1, t.c_str());
 		delay(200);
 		// ...
@@ -95,7 +96,6 @@ void opcontrol() {
 			Clamp.move_absolute(0,-100);
 		}
 		else{
-			Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
 			Clamp.move_velocity(0);
 		}
     if (RUp.changedToPressed() && goalHeight < NUM_HEIGHTS - 1) {
@@ -111,8 +111,6 @@ void opcontrol() {
     } else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
       fourbarmove(-86);
     } else {
-			FBarL.set_brake_mode(MOTOR_BRAKE_HOLD);
-			FBarR.set_brake_mode(MOTOR_BRAKE_HOLD);
 			fourbarmove(0);
 		}
     pros::delay(20);
