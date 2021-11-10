@@ -18,7 +18,7 @@ EXTRA_CXXFLAGS=
 
 # Set to 1 to enable hot/cold linking
 USE_PACKAGE:=1
-
+#Use_Package
 # Add libraries you do not wish to include in the cold image here
 # EXCLUDE_COLD_LIBRARIES:= $(FWDIR)/your_library.a
 EXCLUDE_COLD_LIBRARIES:=
