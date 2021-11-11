@@ -86,8 +86,8 @@ void opcontrol() {
 	double prevl = 0;
   while (true){
 		Task my_task(my_task_fn);
-		double power = control.get_analog(ANALOG_LEFT_Y);
-		double turn = control.get_analog(ANALOG_LEFT_X);
+		double power = -control.get_analog(ANALOG_LEFT_Y);
+		double turn = -control.get_analog(ANALOG_LEFT_X);
 		driverControl(2*power+turn, 2*power - turn);
 		if (control.get_digital(E_CONTROLLER_DIGITAL_X)){
 			Clamp.move(100);
