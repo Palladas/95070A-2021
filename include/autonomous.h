@@ -37,7 +37,7 @@ AsyncMotionProfileControllerBuilder()
   .withOutput(driveauton)
   .buildMotionProfileController();
 std::shared_ptr<AsyncPositionController<double, double>> liftControl =
-    AsyncPosControllerBuilder().withMotor(GHPort).build();
+    AsyncPosControllerBuilder().withMotor(PBPort).build();
 std::shared_ptr<AsyncPositionController<double, double>> fourbar =
     AsyncPosControllerBuilder().withMotor({FBRPort,-FBLPort}).build();
 
@@ -53,6 +53,7 @@ void pop(){
 
 
 void NUMOGO(){
+  //gets neutral mobile goal in front of bot
 profileController->generatePath({
       {0_ft, 0_ft, 0_deg},
       {40_in, 0_ft, 0_deg}},
@@ -69,6 +70,7 @@ delay(15000);
 }
 
 void AWP1(){
+  //makes mogo clear AWP line, scores ring on it
   profileController->generatePath({
         {0_ft, 0_ft, 0_deg},
         {20_in, 0_ft, 0_deg}},
@@ -89,6 +91,7 @@ void AWP1(){
   delay(15000);
 }
 void AWP2(){
+  //scores ring inside alliance mobile goal that is on the platform
   profileController->generatePath({
         {0_ft, 0_ft, 0_deg},
         {6_in, 0_ft, 0_deg}},
