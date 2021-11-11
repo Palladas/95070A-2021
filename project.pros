@@ -308,7 +308,7 @@
         "upload_options": {
             "compress_bin": true,
             "description": "dumb",
-            "remote_name": "Template-PROS",
+            "remote_name": "Comp1",
             "slot": 1
         }
     }

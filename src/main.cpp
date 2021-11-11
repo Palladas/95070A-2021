@@ -107,6 +107,9 @@ void opcontrol() {
 		else if (control.get_digital(E_CONTROLLER_DIGITAL_R2)){
 			GHold.move(-100);
 		}
+		else{
+			GHold.move_velocity(0);
+		}
     if (RUp.changedToPressed() && goalHeight < NUM_HEIGHTS - 1) {
       goalHeight++;
       liftControl->setTarget(heights[goalHeight]);

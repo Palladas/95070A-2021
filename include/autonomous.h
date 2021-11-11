@@ -37,7 +37,7 @@ AsyncMotionProfileControllerBuilder()
   .withOutput(driveauton)
   .buildMotionProfileController();
 std::shared_ptr<AsyncPositionController<double, double>> liftControl =
-    AsyncPosControllerBuilder().withMotor(PBPort).build();
+    AsyncPosControllerBuilder().withMotor(GHPort).build();
 std::shared_ptr<AsyncPositionController<double, double>> fourbar =
     AsyncPosControllerBuilder().withMotor({FBRPort,-FBLPort}).build();
 
