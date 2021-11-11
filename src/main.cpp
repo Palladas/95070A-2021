@@ -39,9 +39,9 @@ void autonomous() {
      case 1:
 		 	pop();
      case 2:
-		 REDX();
+		 NUMOGO();
      case 3:
-		 REDY();
+		 AWP1();
      case 4:
 
      case 5:
@@ -67,7 +67,7 @@ const int heights2[NUM_HEIGHTS] = {0, 700,1800};
 int x = 0;
 
 void my_task_fn(void* param) {
-	std::string t =std::to_string( (FrontLeft.get_temperature()));
+	std::string t =std::to_string( (FrontLeft.get_temperature()+FrontRight.get_temperature() + BackLeft.get_temperature()+ BackRight.get_temperature()+Clamp.get_temperature()+FBarR.get_temperature()+ FBarL.get_temperature())/7);
 	control.print(1, 1, t.c_str());
 		delay(200);
 		// ...
