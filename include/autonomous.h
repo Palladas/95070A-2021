@@ -18,6 +18,15 @@ ChassisControllerBuilder()
 .withOdometry() // use the same scales as the chassis (above)
 .buildOdometry(); // build an odometry chassis
 
+std::shared_ptr<ChassisController> driveautonnotpid =
+ChassisControllerBuilder()
+.withMotors({FLPort,BLPort},{FRPort,BRPort})
+.withMaxVelocity(200)
+
+// green gearset, 4 inch wheel diameter, 11.5 inch wheel track
+.withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
+.build(); // build an odometry chassis
+
 std::shared_ptr<AsyncMotionProfileController> profileController =
 AsyncMotionProfileControllerBuilder()
   .withLimits({
@@ -43,19 +52,15 @@ void pop(){
 
 
 
-void REDX(){
+void NUMOGO(){
 profileController->generatePath({
       {0_ft, 0_ft, 0_deg},
       {40_in, 0_ft, 0_deg}},
-      "A"
+      "Gotonumogo"
     );
-profileController->generatePath({
-      {40_ft, 0_ft, 0_deg},
-      {0_in, 0_ft, 0_deg}},
-      "B"
-    );
+
 //driveauton->moveDistance(40_in);
-profileController->setTarget("A");
+profileController->setTarget("Gotonumogo");
 delay(1600);
 Clamp.move_relative(1000, 100);
 delay(100);
@@ -63,26 +68,51 @@ driveauton->moveDistance(-40_in);
 delay(15000);
 }
 
-void REDY(){
+void AWP1(){
   profileController->generatePath({
         {0_ft, 0_ft, 0_deg},
         {20_in, 0_ft, 0_deg}},
-        "A"
+        "Gotoamogo"
       );
       profileController->generatePath({
             {0_ft, 0_ft, 0_deg},
-            {-20_in, 0_ft, 0_deg}},
-            "B"
+            {20_in, 0_ft, 0_deg}},
+            "return"
           );
-  profileController->setTarget("A");
-  delay(800);
+  profileController->setTarget("Gotoamogo");
+  delay(860);
   Clamp.move_relative(1000, 100);
   delay(100);
-profileController->setTarget("B");
-delay(100);
-  Clamp.move_relative(0, -100);
+  driveauton->moveDistance(-20_in);
+  delay(800);
+  Clamp.move_relative(-1000, -100);
+  delay(15000);
 }
-
+void AWP2(){
+  profileController->generatePath({
+        {0_ft, 0_ft, 0_deg},
+        {6_in, 0_ft, 0_deg}},
+        "Gotoamogo"
+      );
+      profileController->generatePath({
+            {0_ft, 0_ft, 0_deg},
+            {20_in, 0_ft, 0_deg}},
+            "return"
+          );
+  profileController->setTarget("Gotoamogo");
+  delay(860);
+  Clamp.move_relative(1000, 100);
+  delay(100);
+  driveauton->moveDistance(-6_in);
+  delay(800);
+  Clamp.move_relative(-1000, -100);
+  delay(15000);
+}
 void skills(){
-
+  profileController->generatePath({
+        {0_ft, 0_ft, 0_deg},
+        {20_in, 0_ft, 0_deg}},
+        "test"
+      );
+    profileController->setTarget("test",true);
 }
