@@ -21,6 +21,7 @@ void initialize() {
 	Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
 	FBarL.set_brake_mode(MOTOR_BRAKE_HOLD);
 	FBarR.set_brake_mode(MOTOR_BRAKE_HOLD);
+	GHold.set_brake_mode(MOTOR_BRAKE_HOLD);
   autonSelector();
 
 	//autonSelector();
@@ -79,6 +80,7 @@ void opcontrol() {
 	Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
 	FBarL.set_brake_mode(MOTOR_BRAKE_HOLD);
 	FBarR.set_brake_mode(MOTOR_BRAKE_HOLD);
+	GHold.set_brake_mode(MOTOR_BRAKE_HOLD);
   int goalHeight = 0;
 	double prevr = 0;
 	double prevl = 0;
@@ -93,11 +95,17 @@ void opcontrol() {
 		else if (control.get_digital(E_CONTROLLER_DIGITAL_B)){
 			Clamp.move(-100);
 		}
-		else if(control.get_digital(E_CONTROLLER_DIGITAL_Y)){
+		else if (control.get_digital(E_CONTROLLER_DIGITAL_Y)){
 			Clamp.move_absolute(0,-100);
 		}
 		else{
 			Clamp.move_velocity(0);
+		}
+		if (control.get_digital(E_CONTROLLER_DIGITAL_R1)){
+			GHold.move(100);
+		}
+		else if (control.get_digital(E_CONTROLLER_DIGITAL_R2)){
+			GHold.move(-100);
 		}
     if (RUp.changedToPressed() && goalHeight < NUM_HEIGHTS - 1) {
       goalHeight++;

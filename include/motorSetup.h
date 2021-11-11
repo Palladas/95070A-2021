@@ -19,6 +19,7 @@ const int FRPort = 7;
 const int BLPort = 11;
 const int BRPort = 5;
 const int PBPort = 10;
+const int GHPort = 13;
 const int FBRPort = 8;
 const int FBLPort = 9;
 const int CPort = 12;
@@ -46,6 +47,7 @@ pros::Motor BackLeft(BLPort, true);
 pros::Motor BackRight(BRPort, false);
 pros::Motor FBarR(FBRPort, false);
 pros::Motor FBarL(FBLPort, true);
+pros::Motor GHold(GHPort, true)
 
 /*
 pros::Motor LeftIntake(LIPort, false);
