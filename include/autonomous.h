@@ -66,7 +66,7 @@ profileController->generatePath({
 //driveauton->moveDistance(40_in);
 profileController->setTarget("Gotonumogo");
 delay(1600);
-Clamp.move_relative(7000, 100);
+Clamp.move_relative(5000, 100);
 delay(100);
 profileController->generatePath({
       {0_ft, 0_ft, 0_deg},
@@ -124,12 +124,12 @@ void AWP1(){
         );
       profileController2->setTarget("test");
     delay(860);
-    Clamp.move_relative(7000, 100);
+    Clamp.move_relative(5000, 100);
     delay(100);
     driverControl(-100, -100);
      delay(600);
      driverControl(0, 0);
-    Clamp.move_relative(-7000, -100);
+    Clamp.move_relative(-5000, -100);
     delay(15000);
 }
 void AWP2(){
@@ -176,7 +176,7 @@ void AWP2(){
       );
     profileController2->setTarget("test");
   delay(860);
-  Clamp.move_relative(7000, 100);
+  Clamp.move_relative(5000, 100);
   delay(100);
   profileController2->generatePath({
         {0_ft, 0_ft, 0_deg},
@@ -185,7 +185,7 @@ void AWP2(){
       );
   profileController2->setTarget("plz",true);
    delay(800);
-  Clamp.move_relative(-7000, -100);
+  Clamp.move_relative(-5000, -100);
   delay(15000);
 }
 void skills(){
