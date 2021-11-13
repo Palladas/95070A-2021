@@ -15,7 +15,7 @@ extern pros::Motor BackRight;
 
 //Ports
 const int FLPort = 3;
-const int FRPort = 7;
+const int FRPort = 19;
 const int BLPort = 11;
 const int BRPort = 5;
 const int GHPort = 13;
