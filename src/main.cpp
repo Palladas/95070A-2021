@@ -43,7 +43,7 @@ void autonomous() {
      case 3:
 		 AWP1();
      case 4:
-
+		LZ_AUTO_GO_MID();
      case 5:
 
      case 6:
