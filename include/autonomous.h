@@ -28,8 +28,8 @@ void Drive(){
   .withDerivativeFilters(
         std::make_unique<AverageFilter<3>>()
     )
-  // green gearset, 4 inch wheel diameter, 11.5 inch wheel track
-  .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
+  // green gearset, 4 inch wheel diameter, 15 inch wheel track
+  .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
   .withOdometry() // use the same scales as the chassis (above)
   .buildOdometry(); // build an odometry chassis
 
@@ -38,8 +38,8 @@ void Drive(){
   .withMotors({FLPort,BLPort},{FRPort,BRPort})
   .withMaxVelocity(200)
 
-  // green gearset, 4 inch wheel diameter, 11.5 inch wheel track
-  .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
+  // green gearset, 4 inch wheel diameter, 15 inch wheel track
+  .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
   .build(); // build an odometry chassis
 
   std::shared_ptr<AsyncMotionProfileController> profileController =
@@ -92,8 +92,8 @@ void AWP1(){
     .withDerivativeFilters(
           std::make_unique<AverageFilter<3>>()
       )
-    // green gearset, 4 inch wheel diameter, 11.5 inch wheel track
-    .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
+    // green gearset, 4 inch wheel diameter, 15 inch wheel track
+    .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
     .withOdometry() // use the same scales as the chassis (above)
     .buildOdometry(); // build an odometry chassis
 
@@ -102,8 +102,8 @@ void AWP1(){
     .withMotors({FLPort,BLPort},{FRPort,BRPort})
     .withMaxVelocity(200)
 
-    // green gearset, 4 inch wheel diameter, 11.5 inch wheel track
-    .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
+    // green gearset, 4 inch wheel diameter, 15 inch wheel track
+    .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
     .build(); // build an odometry chassis
 
     std::shared_ptr<AsyncMotionProfileController> profileController2 =
@@ -144,8 +144,8 @@ void AWP2(){
   .withDerivativeFilters(
         std::make_unique<AverageFilter<3>>()
     )
-  // green gearset, 4 inch wheel diameter, 11.5 inch wheel track
-  .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
+  // green gearset, 4 inch wheel diameter, 15 inch wheel track
+  .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
   .withOdometry() // use the same scales as the chassis (above)
   .buildOdometry(); // build an odometry chassis
 
@@ -154,8 +154,8 @@ void AWP2(){
   .withMotors({FLPort,BLPort},{FRPort,BRPort})
   .withMaxVelocity(200)
 
-  // green gearset, 4 inch wheel diameter, 11.5 inch wheel track
-  .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
+  // green gearset, 4 inch wheel diameter, 15 inch wheel track
+  .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
   .build(); // build an odometry chassis
 
   std::shared_ptr<AsyncMotionProfileController> profileController2 =
@@ -202,8 +202,8 @@ void TEST_GO_1() {
     .withDerivativeFilters(
           std::make_unique<AverageFilter<3>>()
       )
-    // green gearset, 4 inch wheel diameter, 11.5 inch wheel track
-    .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
+    // green gearset, 4 inch wheel diameter, 15 inch wheel track
+    .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
     .withOdometry() // use the same scales as the chassis (above)
     .buildOdometry(); // build an odometry chassis
 
@@ -211,8 +211,8 @@ void TEST_GO_1() {
   ChassisControllerBuilder()
   .withMotors({FLPort,BLPort},{FRPort,BRPort})
   .withMaxVelocity(200)
-  // green gearset, 4 inch wheel diameter, 11.5 inch wheel track
-  .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
+  // green gearset, 4 inch wheel diameter, 15 inch wheel track
+  .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
   .build(); // build an odometry chassis
 
   std::shared_ptr<AsyncMotionProfileController> profileController =
@@ -232,9 +232,9 @@ void TEST_GO_1() {
       "move_fw_3ft"
   );
   profileController->generatePath({
-      {0_ft, 0_ft, 0_deg},
+      {3_ft, 3_ft, 0_deg},
       {0_in, 0_in, 0_deg}},
-      "Return"
+      "mv_dia_3ft"
   );
 driveauton->turnAngle(180_deg);
 delay(1600);
@@ -242,27 +242,22 @@ profileController->setTarget("move_fw_3ft",true);
 delay(1600);
 Clamp.move_relative(5000, 10);
 delay(1000);
-// profileController->generatePath({
-//       {0_ft, 0_ft, 0_deg},
-//       {35_in, 0_ft, 0_deg}},
-//       "Gotoamogo"
-//     );
 profileController->setTarget("move_fw_3ft");
 delay(800);
 Clamp.move_relative(-5000, 100);
 delay(1000);
 
-profileController->setTarget("move_fw_3ft", true);
+profileController->setTarget("mv_dia_3ft", true);
 delay(800);
 Clamp.move_relative(-5000, 100);
 delay(1000);
-profileController->setTarget("move_fw_3ft");
+profileController->setTarget("mv_dia_3ft");
 delay(800);
-GHold.move(200);
+GHold.move(-50);
 delay(1000);
 profileController->setTarget("move_fw_3ft", true);
 delay(800);
-GHold.move(-200);
+GHold.move(50);
 delay(1000);
 
 }
@@ -279,8 +274,8 @@ void TEST_GO_2() {
     .withDerivativeFilters(
           std::make_unique<AverageFilter<3>>()
       )
-    // green gearset, 4 inch wheel diameter, 11.5 inch wheel track
-    .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
+    // green gearset, 4 inch wheel diameter, 15 inch wheel track
+    .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
     .withOdometry() // use the same scales as the chassis (above)
     .buildOdometry(); // build an odometry chassis
 
@@ -288,8 +283,8 @@ void TEST_GO_2() {
   ChassisControllerBuilder()
   .withMotors({FLPort,BLPort},{FRPort,BRPort})
   .withMaxVelocity(200)
-  // green gearset, 4 inch wheel diameter, 11.5 inch wheel track
-  .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
+  // green gearset, 4 inch wheel diameter, 15 inch wheel track
+  .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
   .build(); // build an odometry chassis
 
   std::shared_ptr<AsyncMotionProfileController> profileController =
@@ -309,23 +304,24 @@ void TEST_GO_2() {
       "move_3ft"
   );
 
-//driveauton->moveDistance(40_in);
-profileController->setTarget("move_3ft", true);
+driveauton->moveDistance(3_ft);
 delay(1600);
 Clamp.move_relative(5000, 10);
 delay(1000);
 
-profileController->setTarget("move_3ft");
+driveauton->turnAngle(180_deg);
+driveauton->moveDistance(3_ft);
 delay(800);
 Clamp.move_relative(-5000, 100);
 delay(1000);
 
-profileController->setTarget("move_3ft", true);
+driveauton->moveDistance(3_ft);
 delay(1600);
 Clamp.move_relative(5000, 10);
 delay(1000);
 
-profileController->setTarget("move_3ft");
+driveauton->turnAngle(90_deg);
+driveauton->moveDistance(-3_ft);
 delay(800);
 Clamp.move_relative(-5000, 100);
 delay(1000);
@@ -344,8 +340,8 @@ void TEST_GO_3() {
     .withDerivativeFilters(
           std::make_unique<AverageFilter<3>>()
       )
-    // green gearset, 4 inch wheel diameter, 11.5 inch wheel track
-    .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
+    // green gearset, 4 inch wheel diameter, 15 inch wheel track
+    .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
     .withOdometry() // use the same scales as the chassis (above)
     .buildOdometry(); // build an odometry chassis
 
@@ -353,8 +349,8 @@ void TEST_GO_3() {
   ChassisControllerBuilder()
   .withMotors({FLPort,BLPort},{FRPort,BRPort})
   .withMaxVelocity(200)
-  // green gearset, 4 inch wheel diameter, 11.5 inch wheel track
-  .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
+  // green gearset, 4 inch wheel diameter, 15 inch wheel track
+  .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
   .build(); // build an odometry chassis
 
   std::shared_ptr<AsyncMotionProfileController> profileController =
