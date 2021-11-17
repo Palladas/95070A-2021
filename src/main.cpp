@@ -50,13 +50,14 @@ void autonomous() {
 		AWP2();
 		break;
     case 5:
-		TEST_GO_MID();
+		TEST_GO_1();
 		break;
     case 6:
-		TEST_GO_SIDE();
+		TEST_GO_2();
 		break;
     case 7:
-
+		TEST_GO_3();
+		break;
 	case 8:
 		skills();
 		break;
