@@ -43,7 +43,7 @@ void autonomous() {
      case 3:
 		 AWP1();
      case 4:
-		LZ_AUTO_GO_MID();
+		AWP2();
      case 5:
 
      case 6:
@@ -90,21 +90,21 @@ void opcontrol() {
 		double turn = -control.get_analog(ANALOG_LEFT_X);
 		driverControl(2*power+turn, 2*power - turn);
 		if (control.get_digital(E_CONTROLLER_DIGITAL_X)){
-			Clamp.move(100);
-		}
-		else if (control.get_digital(E_CONTROLLER_DIGITAL_B)){
 			Clamp.move(-100);
 		}
+		else if (control.get_digital(E_CONTROLLER_DIGITAL_B)){
+			Clamp.move(100);
+		}
 		else if (control.get_digital(E_CONTROLLER_DIGITAL_Y)){
-			Clamp.move_absolute(0,-100);
+			// Clamp.move_absolute(0,-100);
 		}
 		else{
 			Clamp.move_velocity(0);
 		}
-		if (control.get_digital(E_CONTROLLER_DIGITAL_R1)){
+		if (control.get_digital(E_CONTROLLER_DIGITAL_R2)){
 			GHold.move(100);
 		}
-		else if (control.get_digital(E_CONTROLLER_DIGITAL_R2)){
+		else if (control.get_digital(E_CONTROLLER_DIGITAL_R1)){
 			GHold.move(-100);
 		}
 		else{
