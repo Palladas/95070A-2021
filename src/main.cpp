@@ -50,10 +50,11 @@ void autonomous() {
 		AWP2();
 		break;
     case 5:
-		AUTO_GO_MID();
+		TEST_GO_MID();
 		break;
     case 6:
-
+		TEST_GO_SIDE();
+		break;
     case 7:
 
 	case 8:
@@ -127,10 +128,10 @@ void opcontrol() {
       liftControl->setTarget(heights[goalHeight]);
     }
 		if (control.get_digital(E_CONTROLLER_DIGITAL_L1)) {
-      fourbarmove(200);
+      fourbarmove(120);
 
     } else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
-      fourbarmove(-86);
+      fourbarmove(-120);
     } else {
 			fourbarmove(0);
 		}
