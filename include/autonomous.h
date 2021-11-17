@@ -236,10 +236,11 @@ void TEST_GO_1() {
       {0_in, 0_in, 0_deg}},
       "Return"
   );
-//driveauton->moveDistance(40_in);
+driveauton->turnAngle(180_deg);
+delay(1600);
 profileController->setTarget("move_fw_3ft",true);
 delay(1600);
-Clamp.move_relative(1000, 10);
+Clamp.move_relative(5000, 10);
 delay(1000);
 // profileController->generatePath({
 //       {0_ft, 0_ft, 0_deg},
@@ -248,20 +249,20 @@ delay(1000);
 //     );
 profileController->setTarget("move_fw_3ft");
 delay(800);
-Clamp.move_relative(-1000, 100);
+Clamp.move_relative(-5000, 100);
 delay(1000);
 
 profileController->setTarget("move_fw_3ft", true);
 delay(800);
-Clamp.move_relative(-1000, 100);
+Clamp.move_relative(-5000, 100);
 delay(1000);
 profileController->setTarget("move_fw_3ft");
 delay(800);
-Clamp.move_relative(-1000, 100);
+GHold.move(200);
 delay(1000);
 profileController->setTarget("move_fw_3ft", true);
 delay(800);
-Clamp.move_relative(-1000, 100);
+GHold.move(-200);
 delay(1000);
 
 }
@@ -311,22 +312,22 @@ void TEST_GO_2() {
 //driveauton->moveDistance(40_in);
 profileController->setTarget("move_3ft", true);
 delay(1600);
-Clamp.move_relative(1000, 10);
+Clamp.move_relative(5000, 10);
 delay(1000);
 
 profileController->setTarget("move_3ft");
 delay(800);
-Clamp.move_relative(-1000, 100);
+Clamp.move_relative(-5000, 100);
 delay(1000);
 
 profileController->setTarget("move_3ft", true);
 delay(1600);
-Clamp.move_relative(1000, 10);
+Clamp.move_relative(5000, 10);
 delay(1000);
 
 profileController->setTarget("move_3ft");
 delay(800);
-Clamp.move_relative(-1000, 100);
+Clamp.move_relative(-5000, 100);
 delay(1000);
 
 }
@@ -368,29 +369,34 @@ void TEST_GO_3() {
 
   // Target location path
   profileController->generatePath({
-      {0_in, 0_in, 90_deg},
+      {0_in, 0_in, 45_deg},
       {3_ft, 0_ft, 0_deg}},
       "move_3ft"
   );
 
-//driveauton->moveDistance(40_in);
+driveauton->turnAngle(90_deg);
+delay(1600);
 profileController->setTarget("move_3ft", true);
 delay(1600);
-Clamp.move_relative(1000, 10);
+GHold.move(100);
+driveauton->turnAngle(90_deg);
 delay(1000);
 
 profileController->setTarget("move_3ft");
 delay(800);
-Clamp.move_relative(-1000, 100);
+GHold.move(-100);
+driveauton->turnAngle(90_deg);
 delay(1000);
 
 profileController->setTarget("move_3ft", true);
 delay(1600);
-Clamp.move_relative(1000, 10);
+GHold.move(100);
+driveauton->turnAngle(90_deg);
 delay(1000);
 
 profileController->setTarget("move_3ft");
 delay(800);
-Clamp.move_relative(-1000, 100);
+GHold.move(-100);
+driveauton->turnAngle(90_deg);
 delay(1000);
 }
