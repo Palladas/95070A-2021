@@ -228,8 +228,8 @@ void AUTO_GO_MID() {
 
   // Target location path
   profileController->generatePath({
-      {0_ft, 0_ft, 0_deg},
-      {40_in, 40_in, 0_deg}},
+      {40_in, 40_in, 0_deg},
+      {0_ft, 0_ft, 0_deg}},
       "GotoMid"
   );
   profileController->generatePath({
@@ -240,16 +240,16 @@ void AUTO_GO_MID() {
 //driveauton->moveDistance(40_in);
 profileController->setTarget("GotoMid");
 delay(1600);
-Clamp.move_relative(5000, 100);
+Clamp.move_relative(100, 10);
 delay(100);
-profileController->generatePath({
-      {0_ft, 0_ft, 0_deg},
-      {35_in, 0_ft, 0_deg}},
-      "Gotoamogo"
-    );
-profileController->setTarget("Gotoamogo",true);
+// profileController->generatePath({
+//       {0_ft, 0_ft, 0_deg},
+//       {35_in, 0_ft, 0_deg}},
+//       "Gotoamogo"
+//     );
+profileController->setTarget("Return");
 delay(800);
-Clamp.move_absolute(0, -100);
+Clamp.move_relative(-100, 100);
 delay(100);
 delay(15000);
 
