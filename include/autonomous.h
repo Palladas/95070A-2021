@@ -14,9 +14,7 @@ void pop(){
 
 }
 
-
-
-void NUMOGO(){
+void Drive(){
 
   std::shared_ptr<ChassisController> driveauton =
   ChassisControllerBuilder()
@@ -192,7 +190,7 @@ void skills(){
 
 }
 
-void LZ_AUTO_GO_MID() {
+void AUTO_GO_MID() {
   std::shared_ptr<ChassisController> driveauton =
     ChassisControllerBuilder()
     .withMotors({FLPort,BLPort},{FRPort,BRPort})

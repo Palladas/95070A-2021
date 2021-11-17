@@ -34,24 +34,33 @@ void competition_initialize() {}
 
 void autonomous() {
   switch(selected){
-     case 0:
-		 	disabledAuton();
-     case 1:
-		 	pop();
-     case 2:
-		 NUMOGO();
-     case 3:
-		 AWP1();
-     case 4:
+    case 0:
+		disabledAuton();
+		break;
+    case 1:
+	  	pop();
+		break;
+    case 2:
+		Drive();
+		break;
+    case 3:
+		AWP1();
+		break;
+    case 4:
 		AWP2();
-     case 5:
+		break;
+    case 5:
+		AUTO_GO_MID();
+		break;
+    case 6:
 
-     case 6:
+    case 7:
 
-     case 7:
-
-		 case 8:
-		 	skills();
+	case 8:
+		skills();
+		break;
+	default:
+		return;
    }
 }
 
