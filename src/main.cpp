@@ -38,7 +38,7 @@ void autonomous() {
 		disabledAuton();
 		break;
     case 1:
-	  	pop();
+	  pop();
 		break;
     case 2:
 		Drive();

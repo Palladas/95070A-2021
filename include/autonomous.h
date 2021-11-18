@@ -115,20 +115,12 @@ void AWP1(){
       })
       .withOutput(driveauton)
       .buildMotionProfileController();
-    profileController2->generatePath({
-          {0_ft, 0_ft, 0_deg},
-          {20_in, 0_ft, 0_deg}},
-          "test"
-        );
-      profileController2->setTarget("test");
-    delay(860);
-    Clamp.move_relative(5000, 100);
+      
+    Clamp.move_relative(1000, 200);
     delay(100);
     driverControl(-100, -100);
-     delay(600);
-     driverControl(0, 0);
-    Clamp.move_relative(-5000, -100);
-    delay(15000);
+     delay(1000);
+    Clamp.move_relative(-1000, 100);
 }
 void AWP2(){
 
@@ -167,24 +159,16 @@ void AWP2(){
     })
     .withOutput(driveauton)
     .buildMotionProfileController();
-  profileController2->generatePath({
-        {0_ft, 0_ft, 0_deg},
-        {6_in, 0_ft, 0_deg}},
-        "test"
-      );
-    profileController2->setTarget("test");
-  delay(860);
-  Clamp.move_relative(5000, 100);
-  delay(100);
-  profileController2->generatePath({
-        {0_ft, 0_ft, 0_deg},
-        {12_in, 0_ft, 0_deg}},
-        "plz"
-      );
-  profileController2->setTarget("plz",true);
-   delay(800);
-  Clamp.move_relative(-5000, -100);
-  delay(15000);
+    driveauton->moveDistance(25_in);
+    Clamp.move_relative(5000, 10);
+    delay(1000);
+    driveauton->moveDistance(-20_in);
+    delay(300);
+    Clamp.move_relative(-1000,50);
+    delay(200);
+    driveauton->turnAngle(180_deg);
+
+
 }
 void skills(){
 
@@ -198,21 +182,21 @@ void TEST_GO_1() {
     {0.002, 0, 0.0001}, // Distance controller gains
     {0.001, 0, 0.0001} // Turn controller gains
     )
-    .withMaxVelocity(200)
+    .withMaxVelocity(150)
     .withDerivativeFilters(
           std::make_unique<AverageFilter<3>>()
       )
     // green gearset, 4 inch wheel diameter, 15 inch wheel track
-    .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
+    .withDimensions(AbstractMotor::gearset::green, {{4_in, 16_in}, imev5GreenTPR})
     .withOdometry() // use the same scales as the chassis (above)
     .buildOdometry(); // build an odometry chassis
 
   std::shared_ptr<ChassisController> driveautonnotpid =
   ChassisControllerBuilder()
   .withMotors({FLPort,BLPort},{FRPort,BRPort})
-  .withMaxVelocity(200)
+  .withMaxVelocity(120)
   // green gearset, 4 inch wheel diameter, 15 inch wheel track
-  .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
+  .withDimensions(AbstractMotor::gearset::green, {{4_in, 16_in}, imev5GreenTPR})
   .build(); // build an odometry chassis
 
   std::shared_ptr<AsyncMotionProfileController> profileController =
@@ -227,38 +211,23 @@ void TEST_GO_1() {
 
   // Target location path
   profileController->generatePath({
-      {3_ft, 0_in, 0_deg},
+      {58_in, 0_in, 0_deg},
       {0_ft, 0_ft, 0_deg}},
-      "move_fw_3ft"
+      "first_move"
   );
   profileController->generatePath({
-      {3_ft, 3_ft, 0_deg},
-      {0_in, 0_in, 0_deg}},
-      "mv_dia_3ft"
+      {50_in, 0_in, 0_deg},
+      {0_ft, 0_ft, 0_deg}},
+      "retreat"
   );
-driveauton->turnAngle(180_deg);
-delay(1600);
-profileController->setTarget("move_fw_3ft",true);
-delay(1600);
-Clamp.move_relative(5000, 10);
-delay(1000);
-profileController->setTarget("move_fw_3ft");
-delay(800);
-Clamp.move_relative(-5000, 100);
-delay(1000);
 
-profileController->setTarget("mv_dia_3ft", true);
-delay(800);
-Clamp.move_relative(-5000, 100);
-delay(1000);
-profileController->setTarget("mv_dia_3ft");
-delay(800);
-GHold.move(-50);
-delay(1000);
-profileController->setTarget("move_fw_3ft", true);
-delay(800);
-GHold.move(50);
-delay(1000);
+profileController->setTarget("first_move",true);
+delay(10);
+Clamp.move_relative(2500, 50);
+delay(6000);
+profileController->setTarget("first_move",false);
+
+
 
 }
 
@@ -270,21 +239,21 @@ void TEST_GO_2() {
     {0.002, 0, 0.0001}, // Distance controller gains
     {0.001, 0, 0.0001} // Turn controller gains
     )
-    .withMaxVelocity(200)
+    .withMaxVelocity(150)
     .withDerivativeFilters(
           std::make_unique<AverageFilter<3>>()
       )
     // green gearset, 4 inch wheel diameter, 15 inch wheel track
-    .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
+    .withDimensions(AbstractMotor::gearset::green, {{4_in, 16_in}, imev5GreenTPR})
     .withOdometry() // use the same scales as the chassis (above)
     .buildOdometry(); // build an odometry chassis
 
   std::shared_ptr<ChassisController> driveautonnotpid =
   ChassisControllerBuilder()
   .withMotors({FLPort,BLPort},{FRPort,BRPort})
-  .withMaxVelocity(200)
+  .withMaxVelocity(120)
   // green gearset, 4 inch wheel diameter, 15 inch wheel track
-  .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
+  .withDimensions(AbstractMotor::gearset::green, {{4_in, 16_in}, imev5GreenTPR})
   .build(); // build an odometry chassis
 
   std::shared_ptr<AsyncMotionProfileController> profileController =
@@ -299,33 +268,26 @@ void TEST_GO_2() {
 
   // Target location path
   profileController->generatePath({
-      {0_in, 0_in, 45_deg},
-      {3_ft, 0_ft, 0_deg}},
-      "move_3ft"
+      {54_in, 0_in, 0_deg},
+      {0_ft, 0_ft, 0_deg}},
+      "first_move"
+  );
+  profileController->generatePath({
+      {0_ft, 0_ft, 0_deg},
+      {50_in, 0_in, 0_deg}},
+      "run_home"
   );
 
-driveauton->moveDistance(3_ft);
-delay(1600);
-Clamp.move_relative(5000, 10);
-delay(1000);
-
-driveauton->turnAngle(180_deg);
-driveauton->moveDistance(3_ft);
-delay(800);
-Clamp.move_relative(-5000, 100);
-delay(1000);
-
-driveauton->moveDistance(3_ft);
-delay(1600);
-Clamp.move_relative(5000, 10);
-delay(1000);
-
+profileController->setTarget("first_move",true);
+GHold.move_relative(7500, 10);
+delay(3000);
 driveauton->turnAngle(90_deg);
-driveauton->moveDistance(-3_ft);
-delay(800);
-Clamp.move_relative(-5000, 100);
-delay(1000);
-
+delay(500);
+driveauton->moveDistance(36_in);
+delay(300);
+driveauton->turnAngle(270_deg);
+Clamp.move_relative(5000,10);
+driveauton->moveDistance(-20_in);
 }
 
 void TEST_GO_3() {
@@ -336,21 +298,21 @@ void TEST_GO_3() {
     {0.002, 0, 0.0001}, // Distance controller gains
     {0.001, 0, 0.0001} // Turn controller gains
     )
-    .withMaxVelocity(200)
+    .withMaxVelocity(150)
     .withDerivativeFilters(
           std::make_unique<AverageFilter<3>>()
       )
     // green gearset, 4 inch wheel diameter, 15 inch wheel track
-    .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
+    .withDimensions(AbstractMotor::gearset::green, {{4_in, 16_in}, imev5GreenTPR})
     .withOdometry() // use the same scales as the chassis (above)
     .buildOdometry(); // build an odometry chassis
 
   std::shared_ptr<ChassisController> driveautonnotpid =
   ChassisControllerBuilder()
   .withMotors({FLPort,BLPort},{FRPort,BRPort})
-  .withMaxVelocity(200)
+  .withMaxVelocity(100)
   // green gearset, 4 inch wheel diameter, 15 inch wheel track
-  .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
+  .withDimensions(AbstractMotor::gearset::green, {{4_in, 16_in}, imev5GreenTPR})
   .build(); // build an odometry chassis
 
   std::shared_ptr<AsyncMotionProfileController> profileController =
@@ -365,34 +327,26 @@ void TEST_GO_3() {
 
   // Target location path
   profileController->generatePath({
-      {0_in, 0_in, 45_deg},
-      {3_ft, 0_ft, 0_deg}},
-      "move_3ft"
+      {54_in, 0_in, 0_deg},
+      {0_ft, 0_ft, 0_deg}},
+      "first_move"
+  );
+  profileController->generatePath({
+      {0_ft, 0_ft, 0_deg},
+      {50_in, 0_in, 0_deg}},
+      "run_home"
   );
 
-driveauton->turnAngle(90_deg);
-delay(1600);
-profileController->setTarget("move_3ft", true);
-delay(1600);
-GHold.move(100);
-driveauton->turnAngle(90_deg);
+GHold.move_relative(2500, 10);
 delay(1000);
 
-profileController->setTarget("move_3ft");
-delay(800);
-GHold.move(-100);
-driveauton->turnAngle(90_deg);
-delay(1000);
-
-profileController->setTarget("move_3ft", true);
-delay(1600);
-GHold.move(100);
-driveauton->turnAngle(90_deg);
-delay(1000);
-
-profileController->setTarget("move_3ft");
-delay(800);
-GHold.move(-100);
-driveauton->turnAngle(90_deg);
-delay(1000);
+driveauton->moveDistance(72_in);
+GHold.move_relative(-2500,10);
+delay(100);
+driveauton->moveDistance(-24_in);
+driveauton->turnAngle(225_deg);
+delay(500);
+driveauton->moveDistance(27_in);
+Clamp.move_relative(5000,10);
+driveauton->moveDistance(20_in);
 }
