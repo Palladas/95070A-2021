@@ -11,7 +11,94 @@ void disabledAuton(){
 }
 
 void pop(){
+std::shared_ptr<ChassisController> driveauton =
+    ChassisControllerBuilder()
+    .withMotors({FLPort,BLPort},{FRPort,BRPort})
+    .withGains(
+    {0.002, 0, 0.0001}, // Distance controller gains
+    {0.001, 0, 0.0001} // Turn controller gains
+    )
+    .withMaxVelocity(150)
+    .withDerivativeFilters(
+          std::make_unique<AverageFilter<3>>()
+      )
+    // green gearset, 4 inch wheel diameter, 15 inch wheel track
+    .withDimensions(AbstractMotor::gearset::green, {{4_in, 16_in}, imev5GreenTPR})
+    .withOdometry() // use the same scales as the chassis (above)
+    .buildOdometry(); // build an odometry chassis
 
+  std::shared_ptr<ChassisController> driveautonnotpid =
+  ChassisControllerBuilder()
+  .withMotors({FLPort,BLPort},{FRPort,BRPort})
+  .withMaxVelocity(120)
+  // green gearset, 4 inch wheel diameter, 15 inch wheel track
+  .withDimensions(AbstractMotor::gearset::green, {{4_in, 16_in}, imev5GreenTPR})
+  .build(); // build an odometry chassis
+
+  std::shared_ptr<AsyncMotionProfileController> profileController =
+  AsyncMotionProfileControllerBuilder()
+    .withLimits({
+      1.0, // Maximum linear velocity of the Chassis in m/s
+      2.0, // Maximum linear acceleration of the Chassis in m/s/s
+      10.0 // Maximum linear jerk of the Chassis in m/s/s/s
+    })
+    .withOutput(driveauton)
+    .buildMotionProfileController();
+
+  // Target location path
+  profileController->generatePath({
+      {30_in, 0_in, 0_deg},
+      {0_ft, 0_ft, 0_deg}},
+      "first_move"
+  );
+
+profileController->setTarget("first_move",true);
+   delay(1000);
+}
+
+void Inspection_Auton(){
+std::shared_ptr<ChassisController> driveauton =
+    ChassisControllerBuilder()
+    .withMotors({FLPort,BLPort},{FRPort,BRPort})
+    .withGains(
+    {0.002, 0, 0.0001}, // Distance controller gains
+    {0.001, 0, 0.0001} // Turn controller gains
+    )
+    .withMaxVelocity(200)
+
+    .withDerivativeFilters(
+          std::make_unique<AverageFilter<3>>()
+      )
+    // green gearset, 4 inch wheel diameter, 15 inch wheel track
+    .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
+    .withOdometry() // use the same scales as the chassis (above)
+    .buildOdometry(); // build an odometry chassis
+
+    std::shared_ptr<ChassisController> driveautonnotpid =
+    ChassisControllerBuilder()
+    .withMotors({FLPort,BLPort},{FRPort,BRPort})
+    .withMaxVelocity(200)
+
+    // green gearset, 4 inch wheel diameter, 15 inch wheel track
+    .withDimensions(AbstractMotor::gearset::green, {{4_in, 15_in}, imev5GreenTPR})
+    .build(); // build an odometry chassis
+
+    std::shared_ptr<AsyncMotionProfileController> profileController2 =
+    AsyncMotionProfileControllerBuilder()
+      .withLimits({
+        1.0, // Maximum linear velocity of the Chassis in m/s
+        2.0, // Maximum linear acceleration of the Chassis in m/s/s
+        10.0 // Maximum linear jerk of the Chassis in m/s/s/s
+      })
+      .withOutput(driveauton)
+      .buildMotionProfileController();
+      
+    GHold.move_relative(500, 100);
+    delay(100);
+    driverControl(-100, -100);
+     delay(1000);
+    GHold.move_relative(-500, 100);
+    delay(15000);
 }
 
 void Drive(){
@@ -73,7 +160,7 @@ profileController->generatePath({
     );
 profileController->setTarget("Gotoamogo",true);
 delay(800);
-Clamp.move_absolute(0, -100);
+GHold.move_absolute(0, -100);
 delay(100);
 delay(15000);
 }
@@ -116,11 +203,11 @@ void AWP1(){
       .withOutput(driveauton)
       .buildMotionProfileController();
       
-    Clamp.move_relative(500, 100);
+    GHold.move_relative(500, 100);
     delay(100);
     driverControl(-100, -100);
      delay(1000);
-    Clamp.move_relative(-500, 100);
+    GHold.move_relative(-500, 100);
     delay(15000);
 }
 void AWP2(){
@@ -172,10 +259,10 @@ std::shared_ptr<ChassisController> driveauton =
   );
 
 profileController->setTarget("first_move",true);
-Clamp.move_relative(1000, 100);
+GHold.move_relative(1000, 100);
    delay(1000);
 profileController->setTarget("retreat", true);
-Clamp.move_relative(-1000,100);
+GHold.move_relative(-1000,100);
 delay(15000);
 
 
@@ -233,7 +320,7 @@ void TEST_GO_1() {
 
 profileController->setTarget("first_move",true);
 delay(10);
-Clamp.move_relative(1000, 200);
+GHold.move_relative(1000, 200);
 delay(6000);
 profileController->setTarget("retreat", true);
 delay(15000);
@@ -303,7 +390,7 @@ profileController->setTarget("move_second_numogo", true);
 delay(300);
 driveauton->turnAngle(270_deg);
 delay(1000);
-Clamp.move_relative(-1000,100);
+GHold.move_relative(-1000,100);
 delay(500);
 profileController->setTarget("home", true);
 delay(15000);
@@ -377,8 +464,8 @@ driveauton->turnAngle(225_deg);
 delay(500);
 profileController->setTarget("go_2_WP", true);
 delay(1000);
-Clamp.move_relative(1000,150);
+GHold.move_relative(1000,150);
 profileController->setTarget("retreat_WP", true);
-Clamp.move_relative(-1000,150);
+GHold.move_relative(-1000,150);
 delay(15000);
 }

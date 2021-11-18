@@ -6,7 +6,7 @@ okapi::Controller master;
 const double wheelCircumfrence = 2.75 * M_PI;
 
 int selected = 0;
-std::string autons[9] = {"Disabled", "donumogo", "SentretBot", "AWP_L", "AWP_R", "TEST_Side_numogo", "BAD_TEST_GO_2numogo", "NOTTEST_AWP_CARRY", "Skills"};
+std::string autons[9] = {"Disabled", "Inspection_Auton", "SentretBot", "AWP_L", "AWP_R", "TEST_Side_numogo", "BAD_TEST_GO_2numogo", "NOTTEST_AWP_CARRY", "Skills"};
 int size = 9;//*(&autons + 1) - autons;
 
 void autonSelector(){
