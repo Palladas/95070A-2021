@@ -1,6 +1,6 @@
 #include "main.h"
 #include "pid.h"
-#include "tankDrive.h"
+#include "driveTrain.h"
 
 
 using namespace pros;
@@ -51,7 +51,7 @@ pros::Imu inertial(IMUPort);
 
 pros::ADIDigitalOut piston ('A',true);
 
-tankDrive drive = tankDrive(4.125, 18.7, robotSpeed/127, rotationSpeed/127);
+driveTrain drive = driveTrain(4.125, 18.7, robotSpeed/127, rotationSpeed/127);
 pidController autonlinear = pidController(0, 0.002, 0, 0.0001);
 pidController autonrotation = pidController(0, 0.001, 0, 0.0001);
 
