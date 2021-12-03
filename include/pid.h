@@ -2,7 +2,7 @@
 
 class pidController{
   public:
-    //Constructors
+
     pidController(){}
     pidController(double targetValue):
      tVal(targetValue)
@@ -10,25 +10,22 @@ class pidController{
     pidController(double targetValue, double pGain, double iGain, double dGain):
      tVal(targetValue), kP(pGain), kI(iGain), kD(dGain)
     {
-      iLim = maxLim; ///2;
+      iLim = maxLim;
     }
     pidController(double targetValue, double pGain, double iGain, double dGain, double integralLimit, double maxLimit, double minLimit):
      tVal(targetValue), kP(pGain), kI(iGain), kD(dGain), iLim(integralLimit), maxLim(maxLimit), minLim(minLimit)
     {}
-    //Pid calculations
     void update(double inVal){
       error = tVal - inVal;
       integral += error;
       derivative = error - lasterror;
       lasterror = error;
     }
-    //Check if values are out of range;
     void limitCases(){
       if(fabs(out) > maxLim) out = getSign(out) * maxLim;
       if(fabs(out) < minLim) out = getSign(out) * minLim;
       if(fabs(integral) > iLim) integral = getSign(integral) * iLim;
     }
-    //Calculate output, stop if near target
     double calculateOut(){
       out = kP * error + kI * integral + kD * derivative;
       limitCases();
@@ -57,10 +54,8 @@ class pidController{
       return -input;
     }
     double getSign(double input){
-      //if(input == 0) return 0;
       return abs(input)/input;
     }
-    //Variables
     const double kP = 0;
     const double kI = 0;
     const double kD = 0;
