@@ -1,9 +1,11 @@
 #include "main.h"
+#include "pid.h"
+#include "tankDrive.h"
+
 
 using namespace pros;
 
 const double ticksPerDeg = 900/360;
-//200*4.125*pi/60 * sqrt(2), = 60
 const double robotSpeed = 43.196 * sqrt(2);
 const double rotationSpeed = 200;
 
@@ -22,6 +24,7 @@ const int PBPort = 10;
 const int FBRPort = 8;
 const int FBLPort = 9;
 const int CPort = 12;
+const int IMUPort = 1;
 
 
 pros::Controller control (pros::E_CONTROLLER_MASTER);
@@ -36,8 +39,7 @@ ControllerButton left(ControllerDigital::left);
 ControllerButton right(ControllerDigital::right);
 ControllerButton up(ControllerDigital::up);
 ControllerButton down(ControllerDigital::down);
-/*
-pros::Controller control (E_CONTROLLER_MASTER);*/
+
 pros::Motor Clamp(CPort, E_MOTOR_GEARSET_36, false);
 pros::Motor FrontLeft(FLPort, true);
 pros::Motor FrontRight(FRPort, false);
@@ -45,25 +47,18 @@ pros::Motor BackLeft(BLPort, true);
 pros::Motor BackRight(BRPort, false);
 pros::Motor FBarR(FBRPort, false);
 pros::Motor FBarL(FBLPort, true);
-
-/*
-pros::Motor LeftIntake(LIPort, false);
-pros::Motor RightIntake(RIPort, true);
-pros::Motor BackRoller(LRPort, true);
-pros::Motor MainRoller(RRPort, true);
 pros::Imu inertial(IMUPort);
 
-ADIEncoder yWheel('C', 'D', true);
-ADIEncoder xWheel('A', 'B', false);
+pros::ADIDigitalOut piston ('A',true);
 
+tankDrive drive = tankDrive(4.125, 18.7, robotSpeed/127, rotationSpeed/127);
+pidController autonlinear = pidController(0, 0.002, 0, 0.0001);
+pidController autonrotation = pidController(0, 0.001, 0, 0.0001);
 
-//Calibrate the sensors
 void calibrateSensors(){
-  xWheel.reset();
-  yWheel.reset();
   inertial.reset();
 
-  int timeInit = pros::millis();
+  int timeInit = millis();
 
   inertial.reset();
   while(inertial.is_calibrating()){
@@ -72,4 +67,6 @@ void calibrateSensors(){
   }
   delay(2000);
   lcd::print(1, "Calibration took %f", millis() - timeInit);
-}*/
+
+  autonlinear.tolerance = 0.2;
+}
