@@ -6,7 +6,7 @@
 using namespace pros;
 
 const double ticksPerDeg = 900/360;
-const double robotSpeed = 43.196 * sqrt(2);
+const double robotSpeed = 200;
 const double rotationSpeed = 200;
 
 extern pros::Motor FrontLeft;
@@ -24,7 +24,7 @@ const int PBPort = 10;
 const int FBRPort = 8;
 const int FBLPort = 9;
 const int CPort = 12;
-const int IMUPort = 1;
+const int IMUPort = 13;
 
 
 pros::Controller control (pros::E_CONTROLLER_MASTER);
@@ -51,11 +51,12 @@ pros::Imu inertial(IMUPort);
 
 pros::ADIDigitalOut piston ('A',true);
 
-driveTrain drive = driveTrain(4.125, 18.7, robotSpeed/127, rotationSpeed/127);
+driveTrain drive = driveTrain(3.25, 11.5);
 pidController autonlinear = pidController(0, 0.002, 0, 0.0001);
 pidController autonrotation = pidController(0, 0.001, 0, 0.0001);
 
 void calibrateSensors(){
+  lcd::print(1, "Calibrating");
   inertial.reset();
 
   int timeInit = millis();

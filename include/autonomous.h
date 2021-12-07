@@ -241,9 +241,57 @@ void AWP2(){
   delay(15000);
 }
 
-void test(){
-  driveForward(40,autonlinear,0,autonrotation);
+void SNUMOGO(){
+  driveForward(80, autonlinear,0,autonrotation);
+  delay(100);
+  Clamp.move_relative(1000, 100);
+  driveForward(-60, autonlinear);
 }
+void STWOMOGO(){
+  std::shared_ptr<ChassisController> driveauton =
+  ChassisControllerBuilder()
+  .withMotors({FLPort,BLPort},{FRPort,BRPort})
+  .withGains(
+  {0.002, 0, 0.0001},
+  {0.001, 0, 0.0001}
+  )
+  .withMaxVelocity(200)
+
+  .withDerivativeFilters(
+        std::make_unique<AverageFilter<3>>()
+    )
+  .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
+  .withOdometry()
+  .buildOdometry();
+
+  std::shared_ptr<AsyncMotionProfileController> profileController =
+  AsyncMotionProfileControllerBuilder()
+    .withLimits({
+      1,
+      2.0,
+      10.0
+    })
+    .withOutput(driveauton)
+    .buildMotionProfileController();
+driveForward(80, autonlinear,0,autonrotation);
+Clamp.move_relative(1000, 100);
+delay(100);
+driveForward(-60, autonlinear,0,autonrotation);
+fourbarmove(200);
+delay(500);
+fourbarmove(0);
+turnAngle(90,autonrotation);
+Clamp.move_absolute(0, 100);
+turnAngle(-132,autonrotation);
+fourbarmove(-200);
+delay(500);
+fourbarmove(0);
+driveForward(60, autonlinear,0,autonrotation);
+Clamp.move_absolute(1000, 100);
+delay(200);
+driveForward(-80, autonlinear,0,autonrotation);
+}
+
 
 void skills(){
 
