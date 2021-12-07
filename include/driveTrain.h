@@ -38,24 +38,24 @@ class driveTrain{
     double wheelBR;
 
     void calculateWheelSpeeds(double y, double r){
-      yVel = y * yScaleJoy;
-      rVel = r * rScaleJoy;
+      yVel = y;
+      rVel = r;
 
       linearVel = y;
       double linearMax = maxRPM;
 
-  		double yRPM = yVel/(wheelCircumfrence * root2) * 360 / DPS2RPM;
+  		double yRPM = (yVel/(wheelCircumfrence)) * (900 / DPS2RPM);
   		double rRPM = rVel;
 
       pros::lcd::print(3, "%f", getSign(rRPM));
       if(rRPM > maxRPM) rRPM = getSign(rRPM) * maxRPM;
       pros::lcd::print(4, "%f", getSign(rRPM));
       if(rRPM > maxRPM) yRPM = getSign(yRPM) * maxRPM;
-
       wheelFL = yRPM + rRPM;
   		wheelFR = yRPM - rRPM;
   		wheelBL = yRPM  + rRPM;
   		wheelBR = yRPM  - rRPM;
+
     }
   private:
     double getSign(double input){
