@@ -1,7 +1,30 @@
-#include "../include/main.h"
+#include "main.h"
 #include  "../include/autonomous.h"
+#include  "image.h"
 
+/*
+lv_obj_t * myButton;
+lv_obj_t * myButtonLabel;
+lv_obj_t * myLabel;
 
+lv_style_t myButtonStyleREL; //relesed style
+lv_style_t myButtonStylePR; //pressed style
+
+static lv_res_t btn_click_action(lv_obj_t * btn)
+{
+    uint8_t id = lv_obj_get_free_num(btn); //id usefull when there are multiple buttons
+
+    if(id == 0)
+    {
+        char buffer[100];
+		sprintf(buffer, "button was clicked %i milliseconds from start", pros::millis());
+		lv_label_set_text(myLabel, buffer);
+    }
+
+    return LV_RES_OK;
+}*/
+
+LV_IMG_DECLARE(logo_lvgl);
 
 void leftBtn(){
 
@@ -13,15 +36,41 @@ void rightBtn(){
 
 }
 void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::register_btn0_cb(leftBtn);
-	pros::lcd::register_btn1_cb(centerBtn);
-	pros::lcd::register_btn2_cb(rightBtn);
+  LV_IMG_DECLARE(logo_lvgl)
+  lv_obj_t * icon = lv_img_create(lv_scr_act(), NULL);
+  lv_img_set_src(icon, &logo_lvgl);
+	/*lv_style_copy(&myButtonStyleREL, &lv_style_plain);
+    myButtonStyleREL.body.main_color = LV_COLOR_MAKE(150, 0, 0);
+    myButtonStyleREL.body.grad_color = LV_COLOR_MAKE(0, 0, 150);
+    myButtonStyleREL.body.radius = 0;
+    myButtonStyleREL.text.color = LV_COLOR_MAKE(255, 255, 255);
+
+    lv_style_copy(&myButtonStylePR, &lv_style_plain);
+    myButtonStylePR.body.main_color = LV_COLOR_MAKE(255, 0, 0);
+    myButtonStylePR.body.grad_color = LV_COLOR_MAKE(0, 0, 255);
+    myButtonStylePR.body.radius = 0;
+    myButtonStylePR.text.color = LV_COLOR_MAKE(255, 255, 255);
+
+    myButton = lv_btn_create(lv_scr_act(), NULL); //create button, lv_scr_act() is deafult screen object
+    lv_obj_set_free_num(myButton, 0); //set button is to 0
+    lv_btn_set_action(myButton, LV_BTN_ACTION_CLICK, btn_click_action); //set function to be called on button click
+    lv_btn_set_style(myButton, LV_BTN_STYLE_REL, &myButtonStyleREL); //set the relesed style
+    lv_btn_set_style(myButton, LV_BTN_STYLE_PR, &myButtonStylePR); //set the pressed style
+    lv_obj_set_size(myButton, 200, 50); //set the button size
+    lv_obj_align(myButton, NULL, LV_ALIGN_IN_TOP_LEFT, 10, 10); //set the position to top mid
+
+    myButtonLabel = lv_label_create(myButton, NULL); //create label and puts it inside of the button
+    lv_label_set_text(myButtonLabel, "Click the Button"); //sets label text
+
+    myLabel = lv_label_create(lv_scr_act(), NULL); //create label and puts it on the screen
+    lv_label_set_text(myLabel, "Button has not been clicked yet"); //sets label text
+    lv_obj_align(myLabel, NULL, LV_ALIGN_IN_LEFT_MID, 10, 0); //set the position to centerx*/
 	inertial.tare();
 	FrontLeft.set_brake_mode(MOTOR_BRAKE_COAST);
 	FrontRight.set_brake_mode(MOTOR_BRAKE_COAST);
 	BackRight.set_brake_mode(MOTOR_BRAKE_COAST);
 	BackLeft.set_brake_mode(MOTOR_BRAKE_COAST);
+	piston.set_value(true);
 	delay(2000);
   autonSelector();
 }
@@ -81,7 +130,7 @@ bool climb = 0;
 std::string climbstring = "No Climb";
 
 void my_task_fn(void* param) {
-	std::string t =std::to_string( (FrontLeft.get_temperature()+FrontRight.get_temperature() + BackLeft.get_temperature()+ BackRight.get_temperature()+Clamp.get_temperature()+FBarR.get_temperature()+ FBarL.get_temperature())/7);
+	std::string t =std::to_string( (FrontLeft.get_temperature()+FrontRight.get_temperature() + BackLeft.get_temperature()+ BackRight.get_temperature()+FBarR.get_temperature())/6);
 	control.print(1, 1,t.c_str());
 		delay(200);
 }
@@ -89,8 +138,6 @@ void my_task_fn(void* param) {
 
 
 void opcontrol() {
-	Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
-	FBarL.set_brake_mode(MOTOR_BRAKE_HOLD);
 	FBarR.set_brake_mode(MOTOR_BRAKE_HOLD);
 	FrontLeft.set_brake_mode(MOTOR_BRAKE_COAST);
 	FrontRight.set_brake_mode(MOTOR_BRAKE_COAST);
@@ -110,25 +157,12 @@ void opcontrol() {
 		if (control.get_digital(E_CONTROLLER_DIGITAL_RIGHT)){
 		//	autonomous();
 		}
-		if (control.get_digital(E_CONTROLLER_DIGITAL_LEFT)){
-			piston.set_value(false);
-		}
 		if (control.get_digital(E_CONTROLLER_DIGITAL_X)){
-			Clamp.move(100);
+			piston.set_value(true);
 		}
 		else if (control.get_digital(E_CONTROLLER_DIGITAL_B)){
-			Clamp.move(-100);
+			piston.set_value(false);
 		}
-		else{
-			Clamp.move_velocity(0);
-		}
-    if (RUp.changedToPressed() && goalHeight < NUM_HEIGHTS - 1) {
-      goalHeight++;
-      liftControl->setTarget(heights[goalHeight]);
-    } else if (RDown.changedToPressed() && goalHeight > 0) {
-      goalHeight--;
-      liftControl->setTarget(heights[goalHeight]);
-    }
 		if (control.get_digital(E_CONTROLLER_DIGITAL_L1)) {
       fourbarmove(200);
 

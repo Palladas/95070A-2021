@@ -1,15 +1,6 @@
 #include "../include/main.h"
 #include "../include/functions.h"
-std::shared_ptr<AsyncPositionController<double, double>> liftControl =
-    AsyncPosControllerBuilder().withMotor(PBPort).build();
-std::shared_ptr<AsyncPositionController<double, double>> fourbar =
-    AsyncPosControllerBuilder().withMotor({FBRPort,-FBLPort}).build();
-    std::shared_ptr<ChassisController> turndrive =
-    ChassisControllerBuilder()
-    .withMotors({FLPort,BLPort},{FRPort,BRPort})
-    .withMaxVelocity(200)
-    .withDimensions(AbstractMotor::gearset::green, {{3.25_in, 13.5_in}, imev5GreenTPR})
-    .build();
+
 
 
 
@@ -58,7 +49,7 @@ void NUMOGO(){
 	);
 profileController->setTarget("Gotonumogo");
 delay(1600);
-Clamp.move_relative(1000, 100);
+piston.set_value(true);
 delay(100);
 profileController->generatePath({
       {0_ft, 0_ft, 0_deg},
@@ -104,7 +95,7 @@ void TWONUMOGO(){
       );
   profileController->setTarget("Gotonumogo");
   delay(1700);
-  Clamp.move_relative(1000, 100);
+  piston.set_value(true);
   delay(100);
   profileController->generatePath({
         {0_ft, 0_ft, 0_deg},
@@ -117,7 +108,7 @@ void TWONUMOGO(){
   delay(500);
   fourbarmove(0);
   driveauton->turnAngle(90_deg);
-  Clamp.move_absolute(0, 100);
+  piston.set_value(false);
   driveauton->turnAngle(-130_deg);
   fourbarmove(-200);
   delay(500);
@@ -129,7 +120,7 @@ void TWONUMOGO(){
       );
   profileController->setTarget("return");
   delay(1300);
-  Clamp.move_absolute(1000, 100);
+  piston.set_value(true);
   delay(200);
   profileController->generatePath({
         {0_ft, 0_ft, 0_deg},
@@ -180,7 +171,7 @@ profileController->generatePath({
         );
 profileController->setTarget("Gotonumogo");
 delay(1600);
-Clamp.move_relative(1000, 100);
+piston.set_value(true);
 delay(100);
 profileController->generatePath({
       {0_ft, 0_ft, 0_deg},
@@ -190,7 +181,7 @@ profileController->generatePath({
 profileController->setTarget("Gotoamogo",true);
 delay(800);
 delay(100);
-Clamp.move_absolute(0,100);
+piston.set_value(false);
 delay(15000);
 }
 void AWP2(){
@@ -228,7 +219,7 @@ void AWP2(){
       );
     profileController2->setTarget("test");
   delay(860);
-  Clamp.move_relative(1000, 100);
+  piston.set_value(true);
   delay(100);
   profileController2->generatePath({
         {0_ft, 0_ft, 0_deg},
@@ -237,14 +228,14 @@ void AWP2(){
       );
   profileController2->setTarget("plz",true);
    delay(800);
-  Clamp.move_relative(-1000, -100);
+piston.set_value(false);
   delay(15000);
 }
 
 void SNUMOGO(){
   driveForward(80, autonlinear,0,autonrotation);
   delay(100);
-  Clamp.move_relative(1000, 100);
+  piston.set_value(true);
   driveForward(-60, autonlinear);
 }
 void STWOMOGO(){
@@ -274,20 +265,20 @@ void STWOMOGO(){
     .withOutput(driveauton)
     .buildMotionProfileController();
 driveForward(80, autonlinear,0,autonrotation);
-Clamp.move_relative(1000, 100);
+piston.set_value(true);
 delay(100);
 driveForward(-60, autonlinear,0,autonrotation);
 fourbarmove(200);
 delay(500);
 fourbarmove(0);
 turnAngle(90,autonrotation);
-Clamp.move_absolute(0, 100);
+piston.set_value(false);
 turnAngle(-132,autonrotation);
 fourbarmove(-200);
 delay(500);
 fourbarmove(0);
 driveForward(60, autonlinear,0,autonrotation);
-Clamp.move_absolute(1000, 100);
+piston.set_value(true);
 delay(200);
 driveForward(-80, autonlinear,0,autonrotation);
 }

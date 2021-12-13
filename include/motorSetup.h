@@ -18,11 +18,11 @@ extern pros::Motor BackRight;
 //Ports
 const int FLPort = 3;
 const int FRPort = 7;
-const int BLPort = 11;
-const int BRPort = 5;
-const int PBPort = 10;
+const int MLPort = 11;
+const int MRPort = 5;
+const int BLPort = 9;
+const int BRPort = 10;
 const int FBRPort = 8;
-const int FBLPort = 9;
 const int CPort = 12;
 const int IMUPort = 13;
 
@@ -40,13 +40,13 @@ ControllerButton right(ControllerDigital::right);
 ControllerButton up(ControllerDigital::up);
 ControllerButton down(ControllerDigital::down);
 
-pros::Motor Clamp(CPort, E_MOTOR_GEARSET_36, false);
 pros::Motor FrontLeft(FLPort, true);
 pros::Motor FrontRight(FRPort, false);
+pros::Motor MidLeft(MLPort, true);
+pros::Motor MidRight(MRPort, false);
 pros::Motor BackLeft(BLPort, true);
 pros::Motor BackRight(BRPort, false);
-pros::Motor FBarR(FBRPort, false);
-pros::Motor FBarL(FBLPort, true);
+pros::Motor FBarR(FBRPort,E_MOTOR_GEARSET_36, false);
 pros::Imu inertial(IMUPort);
 
 pros::ADIDigitalOut piston ('A',true);

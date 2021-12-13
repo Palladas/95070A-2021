@@ -35,13 +35,14 @@ void driverControl(double l, double r){
 
 	FrontLeft.move_velocity(l);
 	FrontRight.move_velocity(r);
+  MidLeft.move_velocity(l);
+	MidRight.move_velocity(r);
 	BackLeft.move_velocity(l);
 	BackRight.move_velocity(r);
 }
 
 void fourbarmove(double speed){
   FBarR.move_velocity(speed);
-  FBarL.move_velocity(speed);
 }
 
 void stopDrive(bool hold = false){
