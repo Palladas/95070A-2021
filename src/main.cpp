@@ -1,6 +1,5 @@
 #include "main.h"
 #include  "../include/autonomous.h"
-#include  "image.h"
 
 /*
 lv_obj_t * myButton;
@@ -24,7 +23,6 @@ static lv_res_t btn_click_action(lv_obj_t * btn)
     return LV_RES_OK;
 }*/
 
-LV_IMG_DECLARE(logo_lvgl);
 
 void leftBtn(){
 
@@ -36,9 +34,6 @@ void rightBtn(){
 
 }
 void initialize() {
-  LV_IMG_DECLARE(logo_lvgl)
-  lv_obj_t * icon = lv_img_create(lv_scr_act(), NULL);
-  lv_img_set_src(icon, &logo_lvgl);
 	/*lv_style_copy(&myButtonStyleREL, &lv_style_plain);
     myButtonStyleREL.body.main_color = LV_COLOR_MAKE(150, 0, 0);
     myButtonStyleREL.body.grad_color = LV_COLOR_MAKE(0, 0, 150);
@@ -71,6 +66,7 @@ void initialize() {
 	BackRight.set_brake_mode(MOTOR_BRAKE_COAST);
 	BackLeft.set_brake_mode(MOTOR_BRAKE_COAST);
 	piston.set_value(true);
+	piston2.set_value(true);
 	delay(2000);
   autonSelector();
 }
@@ -89,7 +85,7 @@ void autonomous() {
      case 1:
 		 break;
      case 2:
-		 NUMOGO();
+		 twoGoal();
 		 break;
      case 3:
 		 AWP1();
@@ -139,6 +135,7 @@ void my_task_fn(void* param) {
 
 void opcontrol() {
 	FBarR.set_brake_mode(MOTOR_BRAKE_HOLD);
+	Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
 	FrontLeft.set_brake_mode(MOTOR_BRAKE_COAST);
 	FrontRight.set_brake_mode(MOTOR_BRAKE_COAST);
 	BackRight.set_brake_mode(MOTOR_BRAKE_COAST);
@@ -163,13 +160,29 @@ void opcontrol() {
 		else if (control.get_digital(E_CONTROLLER_DIGITAL_B)){
 			piston.set_value(false);
 		}
+		if (control.get_digital(E_CONTROLLER_DIGITAL_UP)){
+			piston2.set_value(true);
+		}
+		else if (control.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+			piston2.set_value(false);
+		}
 		if (control.get_digital(E_CONTROLLER_DIGITAL_L1)) {
-      fourbarmove(200);
+      fourbarmove(100);
 
     } else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
-      fourbarmove(-86);
+      fourbarmove(-100);
     } else {
 			fourbarmove(0);
+		}
+		if (control.get_digital(E_CONTROLLER_DIGITAL_R1)) {
+      Clamp.move_velocity(200);
+
+    } else if (control.get_digital(E_CONTROLLER_DIGITAL_R2)) {
+			Clamp.move_velocity(-200);
+
+    } else {
+			Clamp.move_velocity(0);
+
 		}
 		if (control.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
 			//AWP1();
@@ -181,6 +194,8 @@ void opcontrol() {
 				FrontRight.set_brake_mode(MOTOR_BRAKE_HOLD);
 				BackRight.set_brake_mode(MOTOR_BRAKE_HOLD);
 				BackLeft.set_brake_mode(MOTOR_BRAKE_HOLD);
+        MidRight.set_brake_mode(MOTOR_BRAKE_HOLD);
+        MidLeft.set_brake_mode(MOTOR_BRAKE_HOLD);
 				std::string climbstring = "Climb";
 			}else{
 				multiplier = 2;
@@ -188,6 +203,8 @@ void opcontrol() {
 				FrontRight.set_brake_mode(MOTOR_BRAKE_COAST);
 				BackRight.set_brake_mode(MOTOR_BRAKE_COAST);
 				BackLeft.set_brake_mode(MOTOR_BRAKE_COAST);
+        MidRight.set_brake_mode(MOTOR_BRAKE_COAST);
+        MidLeft.set_brake_mode(MOTOR_BRAKE_COAST);
 				std::string climbstring = "No Climb";
 			}
 

@@ -23,7 +23,7 @@ const int MRPort = 5;
 const int BLPort = 9;
 const int BRPort = 10;
 const int FBRPort = 8;
-const int CPort = 12;
+const int CPort = 1;
 const int IMUPort = 13;
 
 
@@ -45,11 +45,15 @@ pros::Motor FrontRight(FRPort, false);
 pros::Motor MidLeft(MLPort, true);
 pros::Motor MidRight(MRPort, false);
 pros::Motor BackLeft(BLPort, true);
+pros::Motor Clamp(CPort, E_MOTOR_GEARSET_36, false);
+
 pros::Motor BackRight(BRPort, false);
 pros::Motor FBarR(FBRPort,E_MOTOR_GEARSET_36, false);
 pros::Imu inertial(IMUPort);
 
 pros::ADIDigitalOut piston ('A',true);
+pros::ADIDigitalOut piston2 ('B',true);
+
 
 driveTrain drive = driveTrain(3.25, 11.5);
 pidController autonlinear = pidController(0, 0.002, 0, 0.0001);

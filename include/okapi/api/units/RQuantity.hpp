@@ -333,7 +333,7 @@ constexpr RQuantity<M, L, T, A> round(const RQuantity<M, L, T, A> &lhs,
 // ------------------------------
 
 constexpr Number
-sin(const RQuantity<std::ratio<0>, std::ratio<0>, std::ratio<0>, std::ratio<1>> &rhs) {
+sin(RQuantity<std::ratio<0>, std::ratio<0>, std::ratio<0>, std::ratio<1>> &rhs) {
   return Number(std::sin(rhs.getValue()));
 }
 
@@ -391,6 +391,7 @@ acosh(const Number &rhs) {
   return RQuantity<std::ratio<0>, std::ratio<0>, std::ratio<0>, std::ratio<1>>(
     std::acosh(rhs.getValue()));
 }
+
 
 constexpr RQuantity<std::ratio<0>, std::ratio<0>, std::ratio<0>, std::ratio<1>>
 atanh(const Number &rhs) {

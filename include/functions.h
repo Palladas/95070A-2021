@@ -5,7 +5,7 @@ okapi::Controller master;
 const double wheelCircumfrence = 10*3.25 * M_PI/6;
 
 int selected = 0;
-std::string autons[9] = {"Disabled", "Pop", "NUMOGO", "AWP1", "AWP2", "TWONUMOGO", "SNUMOGO", "S2NUMOGO", "Skills"};
+std::string autons[9] = {"Disabled", "Pop", "TWOGOAL", "AWP1", "AWP2", "TWONUMOGO", "SNUMOGO", "S2NUMOGO", "Skills"};
 int size = 9;//*(&autons + 1) - autons;
 
 void autonSelector(){
@@ -49,6 +49,8 @@ void stopDrive(bool hold = false){
   if(hold){
     FrontLeft.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     FrontRight.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    MidLeft.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    MidRight.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     BackLeft.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     BackRight.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   }
@@ -56,11 +58,15 @@ void stopDrive(bool hold = false){
 	FrontRight.move_velocity(0);
 	BackLeft.move_velocity(0);
 	BackRight.move_velocity(0);
+  MidLeft.move_velocity(0);
+  MidRight.move_velocity(0);
   delay(100);
   FrontLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   FrontRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   BackLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   BackRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  MidLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  MidRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 }
 
 void runDriveValues(){
@@ -68,10 +74,12 @@ void runDriveValues(){
 	FrontRight.move_velocity(drive.wheelFR);
 	BackLeft.move_velocity(drive.wheelBL);
 	BackRight.move_velocity(drive.wheelBR);
+  MidLeft.move_velocity(drive.wheelBL);
+	MidRight.move_velocity(drive.wheelBR);
 }
 
 double getEncoders(){
-  return (FrontLeft.get_position()+FrontRight.get_position());
+  return (FrontLeft.get_position()+FrontRight.get_position())/2;
 }
 
 void driveForward(double inches, pidController controller, int timeMax = 5000){
@@ -92,6 +100,8 @@ void driveForward(double inches, pidController controller, int timeMax = 5000){
   }
   FrontLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   FrontRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  MidLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  MidRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   BackLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   BackRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   FrontLeft.move_velocity(0);

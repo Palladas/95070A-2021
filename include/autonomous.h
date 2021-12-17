@@ -233,10 +233,11 @@ piston.set_value(false);
 }
 
 void SNUMOGO(){
-  driveForward(80, autonlinear,0,autonrotation);
+  piston.set_value(false);
+  driveForward(40, autonlinear,0,autonrotation);
   delay(100);
   piston.set_value(true);
-  driveForward(-60, autonlinear);
+  driveForward(-30, autonlinear);
 }
 void STWOMOGO(){
   std::shared_ptr<ChassisController> driveauton =
@@ -264,23 +265,33 @@ void STWOMOGO(){
     })
     .withOutput(driveauton)
     .buildMotionProfileController();
-driveForward(80, autonlinear,0,autonrotation);
+piston2.set_value(false);
+piston2.set_value(true);
+piston.set_value(false);
+driveForward(40, autonlinear,0,autonrotation);
 piston.set_value(true);
 delay(100);
-driveForward(-60, autonlinear,0,autonrotation);
+driveForward(-20, autonlinear,0,autonrotation);
 fourbarmove(200);
 delay(500);
 fourbarmove(0);
-turnAngle(90,autonrotation);
+driveauton->turnAngle(90_deg);
 piston.set_value(false);
-turnAngle(-132,autonrotation);
+driveauton->turnAngle(-132_deg);
 fourbarmove(-200);
 delay(500);
 fourbarmove(0);
-driveForward(60, autonlinear,0,autonrotation);
+driveForward(30, autonlinear,0,autonrotation);
 piston.set_value(true);
 delay(200);
-driveForward(-80, autonlinear,0,autonrotation);
+driveForward(-40, autonlinear,0,autonrotation);
+}
+
+void twoGoal(){
+  driveForward(28, autonlinear,0,autonrotation);
+  piston2.set_value(false);
+  driveForward(-30, autonlinear);
+  piston2.set_value(true);
 }
 
 
