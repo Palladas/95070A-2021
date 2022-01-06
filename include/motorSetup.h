@@ -50,9 +50,11 @@ pros::Motor Clamp(CPort, E_MOTOR_GEARSET_36, false);
 pros::Motor BackRight(BRPort, false);
 pros::Motor FBarR(FBRPort,E_MOTOR_GEARSET_36, false);
 pros::Imu inertial(IMUPort);
+pros::ADIEncoder Left_Enc('G','H');
+pros::ADIEncoder Right_Enc('E','F');
 
 pros::ADIDigitalOut piston ('A',true);
-pros::ADIDigitalOut piston2 ('B',true);
+pros::ADIDigitalOut piston2 ('B',false);
 
 
 driveTrain drive = driveTrain(3.25, 11.5);

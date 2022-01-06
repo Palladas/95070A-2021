@@ -34,6 +34,7 @@ void rightBtn(){
 
 }
 void initialize() {
+	pros::lcd::initialize();
 	/*lv_style_copy(&myButtonStyleREL, &lv_style_plain);
     myButtonStyleREL.body.main_color = LV_COLOR_MAKE(150, 0, 0);
     myButtonStyleREL.body.grad_color = LV_COLOR_MAKE(0, 0, 150);
@@ -61,15 +62,18 @@ void initialize() {
     lv_label_set_text(myLabel, "Button has not been clicked yet"); //sets label text
     lv_obj_align(myLabel, NULL, LV_ALIGN_IN_LEFT_MID, 10, 0); //set the position to centerx*/
 	inertial.tare();
+	Left_Enc.reset();
+	Right_Enc.reset();
 	FrontLeft.set_brake_mode(MOTOR_BRAKE_COAST);
 	FrontRight.set_brake_mode(MOTOR_BRAKE_COAST);
 	BackRight.set_brake_mode(MOTOR_BRAKE_COAST);
 	BackLeft.set_brake_mode(MOTOR_BRAKE_COAST);
 	piston.set_value(true);
-	piston2.set_value(true);
+	piston2.set_value(false);
 	delay(2000);
   autonSelector();
 }
+
 
 void disabled() {
 	control.clear();
@@ -85,7 +89,7 @@ void autonomous() {
      case 1:
 		 break;
      case 2:
-		 twoGoal();
+		 wiiings();
 		 break;
      case 3:
 		 AWP1();
@@ -103,7 +107,7 @@ void autonomous() {
 		 STWOMOGO();
 		 break;
 		 case 8:
-		 	skills();
+		 	solowinpoint();
 			break;
    }
 	return;
@@ -131,7 +135,7 @@ void my_task_fn(void* param) {
 		delay(200);
 }
 
-
+double lastpress;
 
 void opcontrol() {
 	FBarR.set_brake_mode(MOTOR_BRAKE_HOLD);
@@ -146,6 +150,8 @@ void opcontrol() {
 	double prevl = 0;
 	double multiplier = 2;
   while (true){
+		printOnScreen();
+		Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
 	  Task my_task(my_task_fn);
 		//Task climbmode_(climbmode);
 		double power = control.get_analog(ANALOG_LEFT_Y);
@@ -187,7 +193,7 @@ void opcontrol() {
 		if (control.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
 			//AWP1();
 		}
-		if(control.get_digital(E_CONTROLLER_DIGITAL_Y)){
+		if(control.get_digital(E_CONTROLLER_DIGITAL_Y) && millis()-lastpress>=1000){
 			if (multiplier == 2){
 				multiplier = 0.75;
 				FrontLeft.set_brake_mode(MOTOR_BRAKE_HOLD);
@@ -197,6 +203,7 @@ void opcontrol() {
         MidRight.set_brake_mode(MOTOR_BRAKE_HOLD);
         MidLeft.set_brake_mode(MOTOR_BRAKE_HOLD);
 				std::string climbstring = "Climb";
+				lastpress = millis();
 			}else{
 				multiplier = 2;
 				FrontLeft.set_brake_mode(MOTOR_BRAKE_COAST);
@@ -206,6 +213,7 @@ void opcontrol() {
         MidRight.set_brake_mode(MOTOR_BRAKE_COAST);
         MidLeft.set_brake_mode(MOTOR_BRAKE_COAST);
 				std::string climbstring = "No Climb";
+				lastpress = millis();
 			}
 
 		}

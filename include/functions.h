@@ -78,6 +78,15 @@ void runDriveValues(){
 	MidRight.move_velocity(drive.wheelBR);
 }
 
+void printOnScreen(){
+	//lcd::print(1, "Velocity FL: %f", FrontLeft.get_actual_velocity());
+	//lcd::print(2, "Target Velocity FL: %f", drive.wheelTL);
+  lcd::print(0, "Inertial Reading: %f", inertial.get_rotation());
+  lcd::print(1, "Y Wheel Reading: %f", ((double) Left_Enc.get_value()));
+  lcd::print(2, "X Wheel Reading: %f", ((double) Right_Enc.get_value()));
+}
+
+
 double getEncoders(){
   return (FrontLeft.get_position()+FrontRight.get_position())/2;
 }
@@ -140,7 +149,7 @@ void turnAngle(double angle, pidController rtController, int timeMax = 5000){
   while(!rtController.withinTarget()&& millis() - initialT < timeMax){
     lcd::print(2, std::to_string(inertial.get_rotation()).c_str());
     rtController.update(inertial.get_rotation());
-    drive.calculateWheelSpeeds(0, rtController.calculateOut());
+    drive.calculateWheelSpeeds(0, 3*rtController.calculateOut());
     runDriveValues();
     delay(10);
   }

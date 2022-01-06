@@ -185,115 +185,71 @@ piston.set_value(false);
 delay(15000);
 }
 void AWP2(){
-
-  std::shared_ptr<ChassisController> driveauton =
-  ChassisControllerBuilder()
-  .withMotors({FLPort,BLPort},{FRPort,BRPort})
-  .withGains(
-  {0.002, 0, 0.0001},
-  {0.001, 0, 0.0001}
-  )
-  .withMaxVelocity(200)
-
-  .withDerivativeFilters(
-        std::make_unique<AverageFilter<3>>()
-    )
-  .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
-  .withOdometry()
-  .buildOdometry();
-
-
-  std::shared_ptr<AsyncMotionProfileController> profileController2 =
-  AsyncMotionProfileControllerBuilder()
-    .withLimits({
-      1.0,
-      2.0,
-      10.0
-    })
-    .withOutput(driveauton)
-    .buildMotionProfileController();
-  profileController2->generatePath({
-        {0_ft, 0_ft, 0_deg},
-        {6_in, 0_ft, 0_deg}},
-        "test"
-      );
-    profileController2->setTarget("test");
-  delay(860);
-  piston.set_value(true);
-  delay(100);
-  profileController2->generatePath({
-        {0_ft, 0_ft, 0_deg},
-        {12_in, 0_ft, 0_deg}},
-        "plz"
-      );
-  profileController2->setTarget("plz",true);
-   delay(800);
-piston.set_value(false);
-  delay(15000);
+  FBarR.move_absolute(800, 100);
+  driveForward(15,autonlinear);
+  piston.set_value(false);
+  driveForward(-5, autonlinear);
+  FBarR.move_absolute(0, -100);
 }
 
 void SNUMOGO(){
+  inertial.tare();
   piston.set_value(false);
-  driveForward(40, autonlinear,0,autonrotation);
+  driveForward(35, autonlinear,0,autonrotation);
   delay(100);
   piston.set_value(true);
-  driveForward(-30, autonlinear);
+  driveForward(-20, autonlinear);
+  turnAngle(-75, autonrotation);
+  driveForward(-20, autonlinear);
+  delay(300);
+  Clamp.move_relative(2500, 100);
+  delay(1000);
+  driveForward(20, autonlinear);
+  Clamp.move_absolute(0, -100);
 }
+
 void STWOMOGO(){
-  std::shared_ptr<ChassisController> driveauton =
-  ChassisControllerBuilder()
-  .withMotors({FLPort,BLPort},{FRPort,BRPort})
-  .withGains(
-  {0.002, 0, 0.0001},
-  {0.001, 0, 0.0001}
-  )
-  .withMaxVelocity(200)
-
-  .withDerivativeFilters(
-        std::make_unique<AverageFilter<3>>()
-    )
-  .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
-  .withOdometry()
-  .buildOdometry();
-
-  std::shared_ptr<AsyncMotionProfileController> profileController =
-  AsyncMotionProfileControllerBuilder()
-    .withLimits({
-      1,
-      2.0,
-      10.0
-    })
-    .withOutput(driveauton)
-    .buildMotionProfileController();
 piston2.set_value(false);
-piston2.set_value(true);
 piston.set_value(false);
 driveForward(40, autonlinear,0,autonrotation);
 piston.set_value(true);
 delay(100);
+FBarR.move_absolute(700, 100);
 driveForward(-20, autonlinear,0,autonrotation);
-fourbarmove(200);
-delay(500);
-fourbarmove(0);
-driveauton->turnAngle(90_deg);
+turnAngle(48, autonrotation);
 piston.set_value(false);
-driveauton->turnAngle(-132_deg);
-fourbarmove(-200);
-delay(500);
-fourbarmove(0);
-driveForward(30, autonlinear,0,autonrotation);
-piston.set_value(true);
+FBarR.move_absolute(0, -100);
 delay(200);
+turnAngle(-27, autonrotation);
+driveForward(33, autonlinear,0,autonrotation);
+piston.set_value(true);
 driveForward(-40, autonlinear,0,autonrotation);
 }
 
-void twoGoal(){
+void wiiings(){
   driveForward(28, autonlinear,0,autonrotation);
   piston2.set_value(false);
   driveForward(-30, autonlinear);
   piston2.set_value(true);
 }
 
+void solowinpoint(){
+  FBarR.move_absolute(800, 100);
+  driveForward(15,autonlinear);
+  piston.set_value(false);
+  driveForward(-5, autonlinear);
+  FBarR.move_absolute(0, -100);
+  turnAngle(87, autonrotation);
+  driveForward(-12, autonlinear);
+  delay(1000);
+  inertial.tare();
+  turnAngle(87, autonrotation);
+  driveForward(-100, autonlinear);
+  Clamp.move_relative(2500, 100);
+  delay(1000);
+  driveForward(20, autonlinear);
+  Clamp.move_absolute(0, -100);
+}
 
 void skills(){
 
