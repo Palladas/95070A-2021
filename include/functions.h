@@ -5,7 +5,7 @@ okapi::Controller master;
 const double wheelCircumfrence = 10*3.25 * M_PI/6;
 
 int selected = 0;
-std::string autons[9] = {"Disabled", "Pop", "TWOGOAL", "AWP1", "AWP2", "TWONUMOGO", "SNUMOGO", "S2NUMOGO", "Skills"};
+std::string autons[9] = {"Disabled", "Pop", "LeftGoal", "AWP1", "AWP2", "TWONUMOGO", "SNUMOGO", "S2NUMOGO", "Skills"};
 int size = 9;//*(&autons + 1) - autons;
 
 void autonSelector(){
@@ -81,7 +81,7 @@ void runDriveValues(){
 void printOnScreen(){
 	//lcd::print(1, "Velocity FL: %f", FrontLeft.get_actual_velocity());
 	//lcd::print(2, "Target Velocity FL: %f", drive.wheelTL);
-  lcd::print(0, "Inertial Reading: %f", inertial.get_rotation());
+  lcd::print(0, "Clamp Reading: %f", Clamp.get_position());
   lcd::print(1, "Y Wheel Reading: %f", ((double) Left_Enc.get_value()));
   lcd::print(2, "X Wheel Reading: %f", ((double) Right_Enc.get_value()));
 }
@@ -119,7 +119,7 @@ void driveForward(double inches, pidController controller, int timeMax = 5000){
 	BackRight.move_velocity(0);
 }
 
-void driveForward(double inches, pidController controller, double angle, pidController rtController, int timeMax = 5000){
+void driveForward(double inches, pidController controller, double angle, pidController rtController,double speed = 200, int timeMax = 5000){
   controller.resetID();
   rtController.resetID();
   double initialY = ((double) getEncoders()) *( wheelCircumfrence/900);
