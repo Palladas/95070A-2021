@@ -40,11 +40,11 @@ ControllerButton right(ControllerDigital::right);
 ControllerButton up(ControllerDigital::up);
 ControllerButton down(ControllerDigital::down);
 
-pros::Motor FrontLeft(FLPort, true);
-pros::Motor FrontRight(FRPort, false);
-pros::Motor MidLeft(MLPort, true);
-pros::Motor MidRight(MRPort, false);
-pros::Motor BackLeft(BLPort, true);
+pros::Motor FrontLeft(FLPort,MOTOR_GEARSET_06, true);
+pros::Motor FrontRight(FRPort,MOTOR_GEARSET_06, false);
+pros::Motor MidLeft(MLPort,MOTOR_GEARSET_06, true);
+pros::Motor MidRight(MRPort,MOTOR_GEARSET_06, false);
+pros::Motor BackLeft(BLPort,MOTOR_GEARSET_06, true);
 pros::Motor Clamp(CPort, E_MOTOR_GEARSET_36, false);
 
 pros::Motor BackRight(BRPort, false);
