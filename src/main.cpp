@@ -101,7 +101,7 @@ void opcontrol() {
   int goalHeight = 0;
 	double prevr = 0;
 	double prevl = 0;
-	double multiplier = 2;
+	double multiplier = 6;
   while (true){
 		printOnScreen();
 		Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
@@ -148,7 +148,7 @@ void opcontrol() {
 		}
 		if(control.get_digital(E_CONTROLLER_DIGITAL_Y) && millis()-lastpress>=1000){
 			if (multiplier == 2){
-				multiplier = 0.75;
+				multiplier = 3;
 				FrontLeft.set_brake_mode(MOTOR_BRAKE_HOLD);
 				FrontRight.set_brake_mode(MOTOR_BRAKE_HOLD);
 				BackRight.set_brake_mode(MOTOR_BRAKE_HOLD);
@@ -158,7 +158,7 @@ void opcontrol() {
 				std::string climbstring = "Climb";
 				lastpress = millis();
 			}else{
-				multiplier = 2;
+				multiplier = 6;
 				FrontLeft.set_brake_mode(MOTOR_BRAKE_COAST);
 				FrontRight.set_brake_mode(MOTOR_BRAKE_COAST);
 				BackRight.set_brake_mode(MOTOR_BRAKE_COAST);
