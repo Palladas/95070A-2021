@@ -81,7 +81,7 @@ void runDriveValues(){
 void printOnScreen(){
 	//lcd::print(1, "Velocity FL: %f", FrontLeft.get_actual_velocity());
 	//lcd::print(2, "Target Velocity FL: %f", drive.wheelTL);
-  lcd::print(0, "Clamp Reading: %f", Clamp.get_position());
+  lcd::print(0, "Forklift Reading: %f", Clamp.get_position());
   lcd::print(1, "Y Wheel Reading: %f", ((double) Left_Enc.get_value()));
   lcd::print(2, "X Wheel Reading: %f", ((double) Right_Enc.get_value()));
 }
@@ -91,7 +91,7 @@ double getEncoders(){
   return (FrontLeft.get_position()+FrontRight.get_position())/2;
 }
 
-void driveForward(double inches, pidController controller, int timeMax = 5000){
+void driveForward(double inches, pidController controller, double maxRPM = 600){
   stopDrive(false);
   controller.resetID();
   double initialY = ((double) getEncoders()) *( wheelCircumfrence/900);
@@ -101,9 +101,9 @@ void driveForward(double inches, pidController controller, int timeMax = 5000){
   controller.tVal = targetY;
   controller.error = controller.tVal - initialY;
   lcd::print(2, std::to_string(inertial.get_rotation()).c_str());
-  while(!controller.withinTarget()&& millis() - initialT < timeMax){
+  while(!controller.withinTarget()){
     controller.update(((double)getEncoders()) * wheelCircumfrence/900);
-    drive.calculateWheelSpeeds(controller.calculateOut(), 0);
+    drive.calculateWheelSpeeds(controller.calculateOut(), 0,maxRPM);
     runDriveValues();
     delay(10);
   }
@@ -119,7 +119,7 @@ void driveForward(double inches, pidController controller, int timeMax = 5000){
 	BackRight.move_velocity(0);
 }
 
-void driveForward(double inches, pidController controller, double angle, pidController rtController,double speed = 200, int timeMax = 5000){
+void driveForward(double inches, pidController controller, double angle, pidController rtController, double maxRPM = 600){
   controller.resetID();
   rtController.resetID();
   double initialY = ((double) getEncoders()) *( wheelCircumfrence/900);
@@ -129,27 +129,28 @@ void driveForward(double inches, pidController controller, double angle, pidCont
   controller.error = controller.tVal - initialY;
   rtController.tVal = angle;
   rtController.error = angle - inertial.get_rotation();
-  while(!controller.withinTarget() && millis() - initialT < timeMax){
+  while(!controller.withinTarget()){
     rtController.update(inertial.get_rotation());
     controller.update(((double)getEncoders()) * wheelCircumfrence/900);
-    drive.calculateWheelSpeeds(controller.calculateOut(), rtController.calculateOut());
+    drive.calculateWheelSpeeds(controller.calculateOut(), rtController.calculateOut(),maxRPM);
     runDriveValues();
     delay(10);
   }
   stopDrive(false);
 }
 
-void turnAngle(double angle, pidController rtController, int timeMax = 5000){
+void turnAngle(double angle, pidController rtController, double maxRPM= 600){
+  inertial.tare();
   stopDrive(false);
   rtController.resetID();
   int initialT = millis();
   rtController.tVal = angle;
   rtController.error = angle - inertial.get_rotation();
   lcd::print(2, std::to_string(inertial.get_rotation()).c_str());
-  while(!rtController.withinTarget()&& millis() - initialT < timeMax){
+  while(!rtController.withinTarget()){
     lcd::print(2, std::to_string(inertial.get_rotation()).c_str());
     rtController.update(inertial.get_rotation());
-    drive.calculateWheelSpeeds(0, 3*rtController.calculateOut());
+    drive.calculateWheelSpeeds(0, 3*rtController.calculateOut(), maxRPM);
     runDriveValues();
     delay(10);
   }

@@ -16,11 +16,11 @@ class driveTrain{
     {}
 
     double root2 = sqrt(2);
-    double DPS2RPM = 6;
+    double DPS2RPM = 3;
     double degToRad = M_PI / 180;
     double wheelCircumfrence;
     double wheelBaseCircumfrence;
-    double maxRPM = 200;
+    double maxRPM = 600;
 
     double yScaleJoy;
     double rScaleJoy;
@@ -37,12 +37,11 @@ class driveTrain{
     double wheelBL;
     double wheelBR;
 
-    void calculateWheelSpeeds(double y, double r){
+    void calculateWheelSpeeds(double y, double r, double maxRPM){
       yVel = y;
       rVel = r;
 
       linearVel = y;
-      double linearMax = maxRPM;
 
   		double yRPM = (yVel/(wheelCircumfrence)) * (900 / DPS2RPM);
   		double rRPM = rVel;

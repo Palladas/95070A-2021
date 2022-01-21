@@ -16,12 +16,7 @@ void initialize() {
 	inertial.tare();
 	Left_Enc.reset();
 	Right_Enc.reset();
-	FrontLeft.set_brake_mode(MOTOR_BRAKE_COAST);
-	FrontRight.set_brake_mode(MOTOR_BRAKE_COAST);
-	BackRight.set_brake_mode(MOTOR_BRAKE_COAST);
-	BackLeft.set_brake_mode(MOTOR_BRAKE_COAST);
-	piston.set_value(true);
-	piston2.set_value(false);
+	piston.set_value(false);
 	delay(2000);
   autonSelector();
 }
@@ -97,6 +92,8 @@ void opcontrol() {
 	FrontRight.set_brake_mode(MOTOR_BRAKE_COAST);
 	BackRight.set_brake_mode(MOTOR_BRAKE_COAST);
 	BackLeft.set_brake_mode(MOTOR_BRAKE_COAST);
+	MidLeft.set_brake_mode(MOTOR_BRAKE_COAST);
+	MidRight.set_brake_mode(MOTOR_BRAKE_COAST);
 	master.clear();
   int goalHeight = 0;
 	double prevr = 0;
@@ -109,7 +106,7 @@ void opcontrol() {
 		//Task climbmode_(climbmode);
 		double power = control.get_analog(ANALOG_LEFT_Y);
 		double turn = control.get_analog(ANALOG_LEFT_X);
-		driverControl(multiplier*power+turn, multiplier*power - turn);
+		driverControl(multiplier*(power+3*turn/6), multiplier*(power - 3*turn/6));
 		if (control.get_digital(E_CONTROLLER_DIGITAL_RIGHT)){
 		//	autonomous();
 		}
@@ -148,7 +145,7 @@ void opcontrol() {
 		}
 		if(control.get_digital(E_CONTROLLER_DIGITAL_Y) && millis()-lastpress>=1000){
 			if (multiplier == 2){
-				multiplier = 3;
+				multiplier = 0.75;
 				FrontLeft.set_brake_mode(MOTOR_BRAKE_HOLD);
 				FrontRight.set_brake_mode(MOTOR_BRAKE_HOLD);
 				BackRight.set_brake_mode(MOTOR_BRAKE_HOLD);

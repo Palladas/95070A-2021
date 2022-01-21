@@ -19,7 +19,7 @@ extern pros::Motor BackRight;
 const int FLPort = 3;
 const int FRPort = 7;
 const int MLPort = 11;
-const int MRPort = 5;
+const int MRPort = 2;
 const int BLPort = 9;
 const int BRPort = 10;
 const int FBRPort = 8;
@@ -50,10 +50,10 @@ pros::Motor Clamp(CPort, E_MOTOR_GEARSET_36, false);
 pros::Motor BackRight(BRPort, false);
 pros::Motor FBarR(FBRPort,E_MOTOR_GEARSET_36, false);
 pros::Imu inertial(IMUPort);
-pros::ADIEncoder Left_Enc('G','H');
+pros::ADIEncoder Left_Enc('G','F');
 pros::ADIEncoder Right_Enc('E','F');
 
-pros::ADIDigitalOut piston ('A',true);
+pros::ADIDigitalOut piston ('H',true);
 pros::ADIDigitalOut piston2 ('B',false);
 
 

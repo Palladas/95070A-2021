@@ -156,17 +156,25 @@ void AWP2(){
 
 void SNUMOGO(){
   inertial.tare();
-  piston.set_value(false);
+  piston.set_value(true);
   driveForward(35, autonlinear,0,autonrotation);
   delay(100);
+  piston.set_value(false);
+  FBarR.move_relative(1400,100);
+  driveForward(-25, autonlinear);
+  turnAngle(-60, autonrotation);
+  driveForward(10, autonlinear);
+  Clamp.move_relative(3000, 50);
+  delay(2000);
+  driveForward(-24, autonlinear);
   piston.set_value(true);
-  driveForward(-20, autonlinear);
-  turnAngle(-75, autonrotation);
-  driveForward(-17, autonlinear);
+  Clamp.move_relative(-1000, 100);
   delay(300);
-  Clamp.move_relative(2500, 100);
+  driveForward(10, autonlinear);
+  turnAngle(90, autonrotation);
+  Clamp.move_relative(1200, 100);
   delay(1000);
-  driveForward(30, autonlinear);
+  driveForward(10, autonlinear);
   Clamp.move_absolute(0, -100);
 }
 
