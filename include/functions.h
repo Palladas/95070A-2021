@@ -103,7 +103,7 @@ void driveForward(double inches, pidController controller, double maxRPM = 600){
   lcd::print(2, std::to_string(inertial.get_rotation()).c_str());
   while(!controller.withinTarget()){
     controller.update(((double)getEncoders()) * wheelCircumfrence/900);
-    drive.calculateWheelSpeeds(controller.calculateOut(), 0,maxRPM);
+    drive.calculateWheelSpeeds(maxRPM*controller.calculateOut()/600, 0,maxRPM);
     runDriveValues();
     delay(10);
   }
@@ -120,6 +120,7 @@ void driveForward(double inches, pidController controller, double maxRPM = 600){
 }
 
 void driveForward(double inches, pidController controller, double angle, pidController rtController, double maxRPM = 600){
+  inertial.tare();
   controller.resetID();
   rtController.resetID();
   double initialY = ((double) getEncoders()) *( wheelCircumfrence/900);
@@ -128,11 +129,17 @@ void driveForward(double inches, pidController controller, double angle, pidCont
   controller.tVal = targetY;
   controller.error = controller.tVal - initialY;
   rtController.tVal = angle;
-  rtController.error = angle - inertial.get_rotation();
+  double rterror = angle - inertial.get_rotation();
+  if (-1<=rterror<=1){
+    rtController.error = 0;
+  }
+  else{
+    rtController.error = rterror;
+  }
   while(!controller.withinTarget()){
     rtController.update(inertial.get_rotation());
     controller.update(((double)getEncoders()) * wheelCircumfrence/900);
-    drive.calculateWheelSpeeds(controller.calculateOut(), rtController.calculateOut(),maxRPM);
+    drive.calculateWheelSpeeds(maxRPM*controller.calculateOut()/600, maxRPM*rtController.calculateOut()/600,maxRPM);
     runDriveValues();
     delay(10);
   }
@@ -150,7 +157,7 @@ void turnAngle(double angle, pidController rtController, double maxRPM= 600){
   while(!rtController.withinTarget()){
     lcd::print(2, std::to_string(inertial.get_rotation()).c_str());
     rtController.update(inertial.get_rotation());
-    drive.calculateWheelSpeeds(0, 3*rtController.calculateOut(), maxRPM);
+    drive.calculateWheelSpeeds(0, 10*maxRPM*rtController.calculateOut()/600, maxRPM);
     runDriveValues();
     delay(10);
   }

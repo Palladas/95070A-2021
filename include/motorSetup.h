@@ -53,7 +53,7 @@ pros::Imu inertial(IMUPort);
 pros::ADIEncoder Left_Enc('G','F');
 pros::ADIEncoder Right_Enc('E','F');
 
-pros::ADIDigitalOut piston ('H',true);
+pros::ADIDigitalOut piston ('A',true);
 pros::ADIDigitalOut piston2 ('B',false);
 
 

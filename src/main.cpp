@@ -80,7 +80,7 @@ std::string climbstring = "No Climb";
 void my_task_fn(void* param) {
 	std::string t =std::to_string( (FrontLeft.get_temperature()+FrontRight.get_temperature() + BackLeft.get_temperature()+ BackRight.get_temperature()+FBarR.get_temperature())/6);
 	control.print(1, 1,t.c_str());
-		delay(200);
+	delay(200);
 }
 
 double lastpress;
@@ -102,14 +102,11 @@ void opcontrol() {
   while (true){
 		printOnScreen();
 		Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
-	  Task my_task(my_task_fn);
+	  	Task my_task(my_task_fn);
 		//Task climbmode_(climbmode);
 		double power = control.get_analog(ANALOG_LEFT_Y);
 		double turn = control.get_analog(ANALOG_LEFT_X);
-		driverControl(multiplier*(power+3*turn/6), multiplier*(power - 3*turn/6));
-		if (control.get_digital(E_CONTROLLER_DIGITAL_RIGHT)){
-		//	autonomous();
-		}
+		driverControl(multiplier*(power+1*turn/6), multiplier*(power - 1*turn/6));
 		if (control.get_digital(E_CONTROLLER_DIGITAL_X)){
 			piston.set_value(true);
 		}
@@ -120,38 +117,31 @@ void opcontrol() {
 			piston2.set_value(true);
 		}
 		else if (control.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
-			piston2.set_value(false);
+			skills();
 		}
 		if (control.get_digital(E_CONTROLLER_DIGITAL_L1)) {
-      fourbarmove(100);
-
-    } else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
-      fourbarmove(-100);
-    } else {
+      		fourbarmove(100);
+    	} else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
+      		fourbarmove(-100);
+    	} else {
 			fourbarmove(0);
 		}
 		if (control.get_digital(E_CONTROLLER_DIGITAL_R1)) {
-      Clamp.move_velocity(200);
-
-    } else if (control.get_digital(E_CONTROLLER_DIGITAL_R2)) {
+      		Clamp.move_velocity(200);
+    	} else if (control.get_digital(E_CONTROLLER_DIGITAL_R2)) {
 			Clamp.move_velocity(-200);
-
-    } else {
+		} else {
 			Clamp.move_velocity(0);
-
-		}
-		if (control.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
-			//AWP1();
 		}
 		if(control.get_digital(E_CONTROLLER_DIGITAL_Y) && millis()-lastpress>=1000){
-			if (multiplier == 2){
-				multiplier = 0.75;
+			if (multiplier == 6){
+				multiplier = 1.5;
 				FrontLeft.set_brake_mode(MOTOR_BRAKE_HOLD);
 				FrontRight.set_brake_mode(MOTOR_BRAKE_HOLD);
 				BackRight.set_brake_mode(MOTOR_BRAKE_HOLD);
 				BackLeft.set_brake_mode(MOTOR_BRAKE_HOLD);
-        MidRight.set_brake_mode(MOTOR_BRAKE_HOLD);
-        MidLeft.set_brake_mode(MOTOR_BRAKE_HOLD);
+        		MidRight.set_brake_mode(MOTOR_BRAKE_HOLD);
+        		MidLeft.set_brake_mode(MOTOR_BRAKE_HOLD);
 				std::string climbstring = "Climb";
 				lastpress = millis();
 			}else{
@@ -160,8 +150,8 @@ void opcontrol() {
 				FrontRight.set_brake_mode(MOTOR_BRAKE_COAST);
 				BackRight.set_brake_mode(MOTOR_BRAKE_COAST);
 				BackLeft.set_brake_mode(MOTOR_BRAKE_COAST);
-        MidRight.set_brake_mode(MOTOR_BRAKE_COAST);
-        MidLeft.set_brake_mode(MOTOR_BRAKE_COAST);
+        		MidRight.set_brake_mode(MOTOR_BRAKE_COAST);
+        		MidLeft.set_brake_mode(MOTOR_BRAKE_COAST);
 				std::string climbstring = "No Climb";
 				lastpress = millis();
 			}
