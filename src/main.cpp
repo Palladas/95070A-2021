@@ -17,6 +17,7 @@ void initialize() {
 	Left_Enc.reset();
 	Right_Enc.reset();
 	piston.set_value(false);
+	piston2.set_value(false);
 	delay(2000);
   autonSelector();
 }
@@ -34,9 +35,10 @@ void autonomous() {
      case 0:
 		 break;
      case 1:
+	 	wings();
 		 break;
      case 2:
-		 wiiings();
+		 leftGoal();
 		 break;
      case 3:
 		 AWP1();
@@ -53,9 +55,15 @@ void autonomous() {
      case 7:
 		 STWOMOGO();
 		 break;
-		 case 8:
-		 	solowinpoint();
-			break;
+	case 8:
+		solowinpoint();
+		break;
+	case 9:
+		skills();
+		break;
+	case 10:
+		test();
+		break;
    }
 	return;
 }
@@ -79,11 +87,15 @@ std::string climbstring = "No Climb";
 
 void my_task_fn(void* param) {
 	std::string t =std::to_string( (FrontLeft.get_temperature()+FrontRight.get_temperature() + BackLeft.get_temperature()+ BackRight.get_temperature()+FBarR.get_temperature())/6);
+	//std::string t =std::to_string(millis());
 	control.print(1, 1,t.c_str());
 	delay(200);
 }
 
+
 double lastpress;
+
+double spin = 1;
 
 void opcontrol() {
 	FBarR.set_brake_mode(MOTOR_BRAKE_HOLD);
@@ -106,7 +118,7 @@ void opcontrol() {
 		//Task climbmode_(climbmode);
 		double power = control.get_analog(ANALOG_LEFT_Y);
 		double turn = control.get_analog(ANALOG_LEFT_X);
-		driverControl(multiplier*(power+1*turn/6), multiplier*(power - 1*turn/6));
+		driverControl(multiplier*(power+1*turn/4.5), multiplier*(power - 1*turn/4.5));
 		if (control.get_digital(E_CONTROLLER_DIGITAL_X)){
 			piston.set_value(true);
 		}
@@ -117,7 +129,7 @@ void opcontrol() {
 			piston2.set_value(true);
 		}
 		else if (control.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
-			skills();
+			piston2.set_value(false);
 		}
 		if (control.get_digital(E_CONTROLLER_DIGITAL_L1)) {
       		fourbarmove(100);

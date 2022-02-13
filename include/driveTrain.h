@@ -46,14 +46,16 @@ class driveTrain{
   		double yRPM = (yVel/(wheelCircumfrence)) * (900 / DPS2RPM);
   		double rRPM = rVel;
 
-      pros::lcd::print(3, "%f", getSign(rRPM));
+      pros::lcd::print(3, "%f", rRPM);
       if(rRPM > maxRPM) rRPM = getSign(rRPM) * maxRPM;
-      pros::lcd::print(4, "%f", getSign(rRPM));
       if(rRPM > maxRPM) yRPM = getSign(yRPM) * maxRPM;
       wheelFL = yRPM + rRPM;
   		wheelFR = yRPM - rRPM;
   		wheelBL = yRPM  + rRPM;
   		wheelBR = yRPM  - rRPM;
+      pros::lcd::print(4, "%f", wheelFL);
+      pros::lcd::print(5, "%f", wheelFR);
+
 
     }
   private:

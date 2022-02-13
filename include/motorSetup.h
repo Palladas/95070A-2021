@@ -18,7 +18,7 @@ extern pros::Motor BackRight;
 //Ports
 const int FLPort = 3;
 const int FRPort = 7;
-const int MLPort = 11;
+const int MLPort = 12;
 const int MRPort = 2;
 const int BLPort = 9;
 const int BRPort = 10;
@@ -60,6 +60,8 @@ pros::ADIDigitalOut piston2 ('B',false);
 driveTrain drive = driveTrain(3.25, 11.5);
 pidController autonlinear = pidController(0, 0.002, 0, 0.0001);
 pidController autonrotation = pidController(0, 0.001, 0, 0.0001);
+pidController skillslinear = pidController(0, 6, 0, 1);
+
 
 void calibrateSensors(){
   lcd::print(1, "Calibrating");
