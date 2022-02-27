@@ -213,21 +213,23 @@ void opcontrol() {
 			}
 
 		}
-		if(control.get_digital(E_CONTROLLER_DIGITAL_UP) && millis()-lastpressROn>=1000){
-			if (ringSpeed == 0){
+		if(control.get_digital(E_CONTROLLER_DIGITAL_UP) && millis()-lastpressROn>=500){
+			if (ringSpeed != 600){
 				ringSpeed=600;
 			}else{
 				ringSpeed=0;
 			}
+			lastpressROn = millis();
 
 		}
-		if(control.get_digital(E_CONTROLLER_DIGITAL_DOWN) && millis()-lastpressROn>=1000){
-			if (ringSpeed == 600){
-				ringSpeed=-600;
+		if(control.get_digital(E_CONTROLLER_DIGITAL_DOWN) && millis()-lastpressROn>=500){
+			//I only out-take on jams and if it runs too fast when it jams ittl shoot out ring
+			if (ringSpeed != -200){
+				ringSpeed=-200;
 			}else{
-				ringSpeed=600;
+				ringSpeed=0;
 			}
-
+			lastpressROn = millis();
 		}
 
     pros::delay(20);
