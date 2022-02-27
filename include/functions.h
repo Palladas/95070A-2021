@@ -220,16 +220,15 @@ void coastAll(){
 }
 
 void balance(pidController bController, double maxRPM = 600){
-  inertial.tare();
   stopDrive(false);
   bController.resetID();
   bController.tVal = 0;
-  bController.error = 0 - inertial.get_pitch();
+  bController.error = inertial.get_pitch();
   lcd::print(2, std::to_string(inertial.get_pitch()).c_str());
   while(!bController.withinTarget()){
     lcd::print(2, std::to_string(inertial.get_pitch()).c_str());
     bController.update(inertial.get_pitch());
-    drive.calculateWheelSpeeds(0, maxRPM*bController.calculateOut()/600, maxRPM);
+    drive.calculateWheelSpeeds(maxRPM*bController.calculateOut()/600,0, maxRPM);
     runDriveValues();
     delay(10);
   }

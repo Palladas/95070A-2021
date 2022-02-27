@@ -25,6 +25,7 @@ const int BRPort = 10;
 const int FBRPort = 8;
 const int CPort = 4;
 const int IMUPort = 13;
+const int ConvPort = -1;
 
 
 pros::Controller control (pros::E_CONTROLLER_MASTER);
@@ -42,10 +43,12 @@ ControllerButton down(ControllerDigital::down);
 
 pros::Motor FrontLeft(FLPort,MOTOR_GEARSET_06, true);
 pros::Motor FrontRight(FRPort,MOTOR_GEARSET_06, false);
-pros::Motor MidLeft(MLPort,MOTOR_GEARSET_06, true);
-pros::Motor MidRight(MRPort,MOTOR_GEARSET_06, false);
+pros::Motor MidLeft(MLPort,MOTOR_GEARSET_06, false);
+pros::Motor MidRight(MRPort,MOTOR_GEARSET_06, true);
 pros::Motor BackLeft(BLPort,MOTOR_GEARSET_06, true);
 pros::Motor Clamp(CPort, E_MOTOR_GEARSET_36, false);
+pros::Motor Rings(ConvPort,MOTOR_GEARSET_06, true);
+
 
 pros::Motor BackRight(BRPort, false);
 pros::Motor FBarR(FBRPort,E_MOTOR_GEARSET_36, false);
@@ -60,7 +63,9 @@ pros::ADIDigitalOut piston2 ('B',false);
 driveTrain drive = driveTrain(3.25, 11.5);
 pidController autonlinear = pidController(0, 0.002, 0, 0.0001);
 pidController autonrotation = pidController(0, 0.001, 0, 0.0001);
-pidController skillslinear = pidController(0, 6, 0, 1);
+pidController skillslinear = pidController(0, 1, 0, 0.0001);
+pidController skillsrotation = pidController(0, 1, 0, 1);
+
 
 
 void calibrateSensors(){

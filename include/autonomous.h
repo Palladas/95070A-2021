@@ -70,25 +70,11 @@ void AWP2(){
 void SNUMOGO(){
   inertial.tare();
   piston.set_value(true);
-  driveForward(33, autonlinear,0,autonrotation);
+  driveForward(30, autonlinear,0,autonrotation);
   delay(100);
   piston.set_value(false);
-  FBarR.move_relative(1400,100);
-  driveForward(-25, autonlinear);
-  turnAngle(-63, autonrotation);
-  driveForward(10, autonlinear);
-  piston.set_value(true);
-  Clamp.move_relative(3000, 50);
-  delay(2000);
-  driveForward(-24, autonlinear,0, autonrotation, 200);
-  Clamp.move_relative(-1000, 100);
-  delay(300);
-  driveForward(10, autonlinear);
-  turnAngle(90, autonrotation);
-  Clamp.move_relative(1200, 100);
-  delay(1000);
-  driveForward(10, autonlinear);
-  Clamp.move_absolute(0, -100);
+  FBarR.move_relative(-1400,100);
+  driveForward(-30, autonlinear);
 }
 
 void STWOMOGO(){
@@ -140,89 +126,92 @@ void leftGoal(){
 }
 
 void solowinpoint(){
-  FrontLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-  FrontRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-  MidLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-  MidRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-  BackLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-  BackRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  holdAll();
   FBarR.move_absolute(-1600, 100);
-  driveForward(10, autonlinear,0, autonrotation, 100);
+  driveForward(12, skillslinear,0, autonrotation, 100);
   piston.set_value(true);
   delay(500);
-  driveForward(-5, autonlinear,0, autonrotation, 100);
+  driveForward(-10, skillslinear,0, autonrotation, 100);
   FBarR.move_absolute(0, -100);
-  turnAngle(70, autonrotation,6000);
-  driveForward(-13, autonlinear,0, autonrotation, 200);
+  turnAngle(90, skillsrotation,1000);
+  driveForward(-20, skillslinear,0, autonrotation, 200);
   delay(300);
   inertial.tare();
-  turnAngle(75, autonrotation,6000);
-  driveForward(-65, autonlinear, 400);
+  turnAngle(90, skillsrotation,1000);
+  driveForward(-60, skillslinear, 400);
   Clamp.move_relative(3000, 100);
   delay(1500);
-  driveForward(-20, autonlinear, 300);
+  driveForward(-28, skillslinear, 300);
   delay(500);
   Clamp.move_absolute(2000, -100);
-  driveForward(20, autonlinear, 300);
+  driveForward(20, skillslinear, 300);
   Clamp.move_absolute(3000, 100);
-  driveForward(10, autonlinear, 300);
-
+  driveForward(10, skillslinear, 300);
+  coastAll();
 }
+
 
 void skills(){
   holdAll();
   int skills_speed = 150;
   piston.set_value(true);
-  Clamp.move_absolute(3000,100);
+  Clamp.move_relative(3000,100);
+  delay(2000);
   driveForward(-24, skillslinear,0, skillslinear, skills_speed);
   Clamp.move_absolute(0,100);
-  driveForward(12, skillslinear,0, skillslinear, 100);
-  turnAngle(90,skillslinear,100);
-  driveForward(60, skillslinear,0, skillslinear, 100);
+  delay(1000);
+  driveForward(12, skillslinear,0, skillslinear, 50);
+  turnAngle(90,skillslinear,200);
+  driveForward(60, skillslinear,0, skillslinear, 50);
   piston.set_value(false);
-  FBarR.move_absolute(2000,100);
-  driveForward(-36, skillslinear,0, skillslinear, 100);
+  FBarR.move_absolute(-6000,-100);
+  driveForward(-36, skillslinear,0, skillslinear, 50);
+  turnAngle(90,skillslinear,200);
+  driveForward(36, skillslinear,0, skillslinear, 50);
   turnAngle(90,skillslinear,100);
-  driveForward(36, skillslinear,0, skillslinear, 100);
-  turnAngle(90,skillslinear,100);
-  driveForward(12, skillslinear,0, skillslinear, 100);
+  driveForward(12, skillslinear,0, skillslinear, 50);
   piston.set_value(true);
-  driveForward(-12, skillslinear,0, skillslinear, 100);
+  driveForward(-6, skillslinear,0, skillslinear, 50);
+  FBarR.move_absolute(0,100);
   turnAngle(-90,skillslinear,100);
-  driveForward(36, skillslinear,0, skillslinear, 100);
+  driveForward(30, skillslinear,0, skillslinear, 50);
   turnAngle(-90,skillslinear,100);
-  driveForward(36, skillslinear,0, skillslinear, 100);
+  driveForward(36, skillslinear,0, skillslinear, 50);
   piston.set_value(false);
-  driveForward(-36, skillslinear,0, skillslinear, 100);
+  FBarR.move_relative(-6000,-100);
+  driveForward(-36, skillslinear,0, skillslinear, 50);
   turnAngle(-90,skillslinear,100);
-  driveForward(36, skillslinear,0, skillslinear, 100);
+  driveForward(36, skillslinear,0, skillslinear, 50);
   turnAngle(-90,skillslinear,100);
-  driveForward(12, skillslinear,0, skillslinear, 100);
+  driveForward(12, skillslinear,0, skillslinear, 50);
   piston.set_value(true);
-  driveForward(-12, skillslinear,0, skillslinear, 100);
+  driveForward(-12, skillslinear,0, skillslinear, 50);
+  FBarR.move_absolute(0,100);
   turnAngle(-90,skillslinear,100);
-  driveForward(36, skillslinear,0, skillslinear, 100);
+  driveForward(36, skillslinear,0, skillslinear, 50);
   turnAngle(-90,skillslinear,100);
-  driveForward(84, skillslinear,0, skillslinear, 100);
+  driveForward(84, skillslinear,0, skillslinear, 50);
   turnAngle(90,skillslinear,100);
-  driveForward(12, skillslinear,0, skillslinear, 100);
+  driveForward(12, skillslinear,0, skillslinear, 50);
   turnAngle(-90,skillslinear,100);
-  driveForward(12, skillslinear,0, skillslinear, 100);
+  driveForward(12, skillslinear,0, skillslinear, 50);
   turnAngle(-90,skillslinear,100);
-  driveForward(24, skillslinear,0, skillslinear, 100);
+  driveForward(24, skillslinear,0, skillslinear, 50);
   piston.set_value(false);
-  driveForward(-12, skillslinear,0, skillslinear, 100);
+  driveForward(-12, skillslinear,0, skillslinear, 50);
+  FBarR.move_relative(-6000,-100);
   turnAngle(-90,skillslinear,100);
-  driveForward(96, skillslinear,0, skillslinear, 100);
+  driveForward(96, skillslinear,0, skillslinear, 50);
   turnAngle(90,skillslinear,100);
-  driveForward(36, skillslinear,0, skillslinear, 100);
+  driveForward(36, skillslinear,0, skillslinear, 50);
   turnAngle(-90,skillslinear,100);
-  driveForward(12, skillslinear,0, skillslinear, 100);
+  driveForward(12, skillslinear,0, skillslinear, 50);
   piston.set_value(true);
-  
   coastAll();
 }
 
 void test(){
-  
+  holdAll();
+  turnAngle(90,skillsrotation,3000);
+  coastAll();
 }

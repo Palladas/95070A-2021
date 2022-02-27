@@ -86,14 +86,57 @@ bool climb = 0;
 std::string climbstring = "No Climb";
 
 void my_task_fn(void* param) {
-	std::string t =std::to_string( (FrontLeft.get_temperature()+FrontRight.get_temperature() + BackLeft.get_temperature()+ BackRight.get_temperature()+FBarR.get_temperature())/6);
+	int maxtemp = FrontLeft.get_temperature();
+	std::string maxmotor= "FrontLeft";
+	if(FrontRight.get_temperature()>maxtemp){
+		maxtemp = FrontRight.get_temperature();
+		maxmotor = "FrontRight";
+	}
+	if(MidLeft.get_temperature()>maxtemp){
+		maxtemp = MidLeft.get_temperature();
+		maxmotor = "MidLeft";
+	}
+	if(MidRight.get_temperature()>maxtemp){
+		maxtemp = MidRight.get_temperature();
+		maxmotor = "MidRight";
+	}
+	if(BackRight.get_temperature()>maxtemp){
+		maxtemp = BackRight.get_temperature();
+		maxmotor = "BackRight";
+	}
+	if(BackLeft.get_temperature()>maxtemp){
+		maxtemp = BackLeft.get_temperature();
+		maxmotor = "BackLeft";
+	}
+	if(FBarR.get_temperature()>maxtemp){
+		maxtemp = FBarR.get_temperature();
+		maxmotor = "FBarR";
+	}
+	if(Clamp.get_temperature()>maxtemp){
+		maxtemp = Clamp.get_temperature();
+		maxmotor = "Clamp";
+	}
 	//std::string t =std::to_string(millis());
-	control.print(1, 1,t.c_str());
+	control.print(1, 1,(maxmotor+std::to_string(maxtemp)).c_str());
 	delay(200);
 }
 
 
+double ringSpeed = 0;
+
+void ring(void* param) {
+	while(true){
+		Rings.move_velocity(ringSpeed);
+		delay(30);
+	}
+}
+
+
 double lastpress;
+double lastpressROn;
+double lastpressRRev;
+
+
 
 double spin = 1;
 
@@ -111,6 +154,7 @@ void opcontrol() {
 	double prevr = 0;
 	double prevl = 0;
 	double multiplier = 6;
+	Task my_task(ring);
   while (true){
 		printOnScreen();
 		Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
@@ -125,10 +169,10 @@ void opcontrol() {
 		else if (control.get_digital(E_CONTROLLER_DIGITAL_B)){
 			piston.set_value(false);
 		}
-		if (control.get_digital(E_CONTROLLER_DIGITAL_UP)){
+		if (control.get_digital(E_CONTROLLER_DIGITAL_LEFT)){
 			piston2.set_value(true);
 		}
-		else if (control.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+		else if (control.get_digital(E_CONTROLLER_DIGITAL_RIGHT)){
 			piston2.set_value(false);
 		}
 		if (control.get_digital(E_CONTROLLER_DIGITAL_L1)) {
@@ -169,6 +213,23 @@ void opcontrol() {
 			}
 
 		}
+		if(control.get_digital(E_CONTROLLER_DIGITAL_UP) && millis()-lastpressROn>=1000){
+			if (ringSpeed == 0){
+				ringSpeed=600;
+			}else{
+				ringSpeed=0;
+			}
+
+		}
+		if(control.get_digital(E_CONTROLLER_DIGITAL_DOWN) && millis()-lastpressROn>=1000){
+			if (ringSpeed == 600){
+				ringSpeed=-600;
+			}else{
+				ringSpeed=600;
+			}
+
+		}
+
     pros::delay(20);
   }
 }
