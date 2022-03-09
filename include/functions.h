@@ -161,7 +161,7 @@ void driveForward(double inches, pidController controller, double angle, pidCont
   controller.tVal = targetY;
   controller.error = controller.tVal - initialY;
   rtController.tVal = angle;
-  double rterror = inertial.get_rotation()- angle;
+  double rterror = angle - inertial.get_rotation();
   while(!controller.withinTarget()){
     rtController.update(inertial.get_rotation());
     controller.update(((double)getEncoders()) * wheelCircumfrence/900);
