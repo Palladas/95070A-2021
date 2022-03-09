@@ -64,7 +64,7 @@ pros::ADIDigitalOut piston3 ('C',false);
 driveTrain drive = driveTrain(3.25, 11.5);
 pidController autonlinear = pidController(0, 0.002, 0, 0.0001);
 pidController autonrotation = pidController(0, 0.001, 0, 0.0001);
-pidController skillslinear = pidController(0, 0.5, 0.025, 10);
+pidController skillslinear = pidController(0, 0.45, 0.0, 5);
 pidController skillsrotation = pidController(0, 1, 0, 1);
 
 
