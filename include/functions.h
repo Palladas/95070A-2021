@@ -161,17 +161,11 @@ void driveForward(double inches, pidController controller, double angle, pidCont
   controller.tVal = targetY;
   controller.error = controller.tVal - initialY;
   rtController.tVal = angle;
-  double rterror = angle - inertial.get_rotation();
-  if (-1<=rterror<=1){
-    rtController.error = 0;
-  }
-  else{
-    rtController.error = rterror;
-  }
+  double rterror = inertial.get_rotation()- angle;
   while(!controller.withinTarget()){
     rtController.update(inertial.get_rotation());
     controller.update(((double)getEncoders()) * wheelCircumfrence/900);
-    drive.calculateWheelSpeeds(maxRPM*controller.calculateOut()/600, rtController.calculateOut(),maxRPM);
+    drive.calculateWheelSpeeds(maxRPM*controller.calculateOut()/600, 5*rtController.calculateOut(),maxRPM);
     runDriveValues();
     delay(10);
   }

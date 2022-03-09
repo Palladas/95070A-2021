@@ -14,18 +14,18 @@ void rightBtn(){
 void initialize() {
 	pros::lcd::initialize();
 	inertial.tare();
-	Left_Enc.reset();
-	Right_Enc.reset();
 	piston.set_value(false);
 	piston2.set_value(false);
+	piston3.set_value(false);
 	delay(2000);
   autonSelector();
+  skillslinear.tolerance = 0.2;
+
 }
 
 
 void disabled() {
 	control.clear();
-	delay(200);
 }
 
 void competition_initialize() {}
@@ -112,10 +112,6 @@ void my_task_fn(void* param) {
 		maxtemp = FBarR.get_temperature();
 		maxmotor = "FBarR";
 	}
-	if(Clamp.get_temperature()>maxtemp){
-		maxtemp = Clamp.get_temperature();
-		maxmotor = "Clamp";
-	}
 	//std::string t =std::to_string(millis());
 	control.print(1, 1,(maxmotor+std::to_string(maxtemp)).c_str());
 	delay(200);
@@ -125,10 +121,8 @@ void my_task_fn(void* param) {
 double ringSpeed = 0;
 
 void ring(void* param) {
-	while(true){
 		Rings.move_velocity(ringSpeed);
 		delay(30);
-	}
 }
 
 
@@ -154,11 +148,12 @@ void opcontrol() {
 	double prevr = 0;
 	double prevl = 0;
 	double multiplier = 6;
-	Task my_task(ring);
   while (true){
 		printOnScreen();
 		Clamp.set_brake_mode(MOTOR_BRAKE_HOLD);
 	  	Task my_task(my_task_fn);
+		  	Task rings_task(ring);
+
 		//Task climbmode_(climbmode);
 		double power = control.get_analog(ANALOG_LEFT_Y);
 		double turn = control.get_analog(ANALOG_LEFT_X);
@@ -213,7 +208,7 @@ void opcontrol() {
 			}
 
 		}
-		if(control.get_digital(E_CONTROLLER_DIGITAL_UP) && millis()-lastpressROn>=500){
+		if(control.get_digital(E_CONTROLLER_DIGITAL_R1) && millis()-lastpressROn>=500){
 			if (ringSpeed != 600){
 				ringSpeed=600;
 			}else{
@@ -222,8 +217,7 @@ void opcontrol() {
 			lastpressROn = millis();
 
 		}
-		if(control.get_digital(E_CONTROLLER_DIGITAL_DOWN) && millis()-lastpressROn>=500){
-			//I only out-take on jams and if it runs too fast when it jams ittl shoot out ring
+		if(control.get_digital(E_CONTROLLER_DIGITAL_R2) && millis()-lastpressROn>=500){
 			if (ringSpeed != -200){
 				ringSpeed=-200;
 			}else{
@@ -231,7 +225,12 @@ void opcontrol() {
 			}
 			lastpressROn = millis();
 		}
-
+		if(control.get_digital(E_CONTROLLER_DIGITAL_UP)){
+			piston3.set_value(true);
+		}
+		if(control.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+			piston3.set_value(false);
+		}
     pros::delay(20);
   }
 }
