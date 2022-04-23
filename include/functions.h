@@ -1,12 +1,13 @@
 #include "../include/main.h"
 #include "../include/motorSetup.h"
+#include "pros/motors.h"
 
 okapi::Controller master;
 const double wheelCircumfrence = 10 * 3.25 * M_PI / 6;
 
 int selected = 0;
 std::string autons[11] = {"Disabled", "Wings",     "LeftGoal", "AWP1",
-                          "AWP2",     "TWONUMOGO", "SNUMOGO",  "S2NUMOGO",
+                          "AWP2",     "VSNUMOGO", "SNUMOGO",  "S2NUMOGO",
                           "SoloWP",   "Skills",    "Test"};
 int size = 11; //*(&autons + 1) - autons;
 
@@ -120,23 +121,18 @@ void driveForward(double inches, pidController controller,
   BackRight.move_velocity(0);
 }
 
-void driveForwardVoltage(double inches, pidController controller, double angle,
-                         pidController rtController, double maxRPM = 600) {
+void driveForwardVoltage(double inches, pidController controller, double maxRPM = 600) {
   inertial.tare();
   controller.resetID();
-  rtController.resetID();
   double initialY = ((double)getEncoders()) * (wheelCircumfrence / 900);
   double targetY = ((double)getEncoders()) * (wheelCircumfrence / 900) + inches;
   int initialT = millis();
   controller.tVal = targetY;
   controller.error = (controller.tVal - initialY);
-  rtController.tVal = (angle);
-  double rterror = angle - inertial.get_rotation();
   while (!controller.withinTarget()) {
-    rtController.update(inertial.get_rotation());
     controller.update(((double)getEncoders()) * wheelCircumfrence / 900);
     drive.calculateWheelSpeeds(maxRPM * 1000 * controller.calculateOut() / 600,
-                               4000 * rtController.calculateOut(), maxRPM);
+                               0, maxRPM);
     FrontLeft.move_voltage(drive.wheelFL);
     FrontRight.move_voltage(drive.wheelFR);
     BackLeft.move_voltage(drive.wheelBL);
@@ -190,6 +186,24 @@ void turnAngle(double angle, pidController rtController, double maxRPM = 6000) {
   stopDrive(false);
 }
 
+void turnAngleAbs(double angle, pidController rtController, double maxRPM = 6000) {
+  stopDrive(false);
+  rtController.resetID();
+  int initialT = millis();
+  rtController.tVal = angle;
+  rtController.error = angle - inertial.get_rotation();
+  lcd::print(2, std::to_string(inertial.get_rotation()).c_str());
+  while (!rtController.withinTarget()) {
+    lcd::print(2, std::to_string(inertial.get_rotation()).c_str());
+    rtController.update(inertial.get_rotation());
+    drive.calculateWheelSpeeds(0, maxRPM * rtController.calculateOut() / 600,
+                               maxRPM);
+    runDriveValues();
+    delay(10);
+  }
+  stopDrive(false);
+}
+
 void holdAll() {
   FrontLeft.set_brake_mode(E_MOTOR_BRAKE_HOLD);
   FrontRight.set_brake_mode(E_MOTOR_BRAKE_HOLD);
@@ -199,6 +213,17 @@ void holdAll() {
   BackRight.set_brake_mode(E_MOTOR_BRAKE_HOLD);
   FBarR.set_brake_mode(E_MOTOR_BRAKE_HOLD);
   Clamp.set_brake_mode(E_MOTOR_BRAKE_HOLD);
+}
+
+void breakAll() {
+  FrontLeft.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+  FrontRight.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+  MidLeft.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+  MidRight.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+  BackLeft.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+  BackRight.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+  FBarR.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+  Clamp.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
 }
 
 void coastAll() {

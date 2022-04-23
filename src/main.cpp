@@ -36,7 +36,7 @@ void autonomous() {
     AWP2();
     break;
   case 5:
-    TWONUMOGO();
+    VSNUMOGO();
     break;
   case 6:
     SNUMOGO();
@@ -187,8 +187,8 @@ void opcontrol() {
     }
     if (control.get_digital(E_CONTROLLER_DIGITAL_R1) &&
         millis() - lastpressROn >= 500) {
-      if (ringSpeed != 600) {
-        ringSpeed = 600;
+      if (ringSpeed != 1200) {
+        ringSpeed = 1200;
       } else {
         ringSpeed = 0;
       }

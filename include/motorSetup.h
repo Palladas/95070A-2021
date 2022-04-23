@@ -22,7 +22,7 @@ const int BLPort = 9;
 const int BRPort = 10;
 const int FBRPort = 8;
 const int CPort = 4;
-const int IMUPort = 13;
+const int IMUPort = 21;
 const int ConvPort = 1;
 const int FDistPort = 4;
 const int BDistPort = 5;
@@ -67,7 +67,7 @@ driveTrain drive = driveTrain(3.25, 11.5);
 pidController autonlinear = pidController(0, 0.002, 0, 0.0001);
 pidController autonrotation = pidController(0, 0.001, 0, 0.0001);
 pidController skillslinear = pidController(0, 0.45, 0.0, 5);
-pidController skillsrotation = pidController(0, 1, 0, 1);
+pidController skillsrotation = pidController(0, 0.30, 0.0, 5);
 
 void calibrateSensors() {
   lcd::print(1, "Calibrating");
