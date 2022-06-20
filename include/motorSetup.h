@@ -1,6 +1,7 @@
 #include "driveTrain.h"
 #include "main.h"
 #include "pid.h"
+#include "pros/adi.hpp"
 
 using namespace pros;
 
@@ -62,6 +63,10 @@ pros::ADIEncoder Right_Enc('E', 'F');
 pros::ADIDigitalOut piston('A', true);
 pros::ADIDigitalOut piston2('B', false);
 pros::ADIDigitalOut piston3('C', false);
+pros::ADIDigitalOut piston4('C', false);
+
+pros::ADIDigitalIn goal('D');
+
 
 driveTrain drive = driveTrain(3.25, 11.5);
 pidController autonlinear = pidController(0, 0.002, 0, 0.0001);

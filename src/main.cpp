@@ -144,6 +144,7 @@ void opcontrol() {
     double power = control.get_analog(ANALOG_LEFT_Y);
     double turn = control.get_analog(ANALOG_LEFT_X);
     driverControl(multiplier * (power + turn), multiplier * (power - turn));
+    //driverControl(multiplier*(power), multiplier*power);
     if (control.get_digital(E_CONTROLLER_DIGITAL_X)) {
       piston.set_value(true);
     } else if (control.get_digital(E_CONTROLLER_DIGITAL_B)) {

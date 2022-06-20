@@ -31,19 +31,34 @@ void TWONUMOGO() {
   driveForward(30, autonlinear);
 }
 
+void goalCover(void *param) {
+  piston.set_value(true);
+  piston3.set_value(true);
+}
+
 void AWP1() {
-  FBarR.move_absolute(1600, 100);
-  delay(1000);
-  driveForward(5, autonlinear, 0, autonrotation, 100);
-  piston.set_value(true);
-  delay(500);
-  driveForward(-5, autonlinear, 0, autonrotation, 100);
-  FBarR.move_absolute(0, 100);
-  delay(1000);
-  driveForward(8, autonlinear, 0, autonrotation, 100);
+  inertial.tare();
+  piston2.set_value(true);
+  delay(300);
+  driveForward(-7, autonlinear,100);
+  piston2.set_value(false);
+  delay(100);
+  driveForward(7, autonlinear,100);
+  double currangle = inertial.get_rotation();
+  while(abs(inertial.get_rotation()-currangle<97)){
+    driverControl(300, 0);
+  }
+  Task clamp_task(goalCover);
+  driveForwardBump(60,autonlinear,0,skillslinear);
   piston.set_value(false);
-  driveForward(-13, autonlinear, 0, autonrotation, 100);
-  piston.set_value(true);
+  driveForward(-27, skillslinear);
+  FBarR.move_absolute(2000, 100);
+  delay(300);
+  Rings.move(600);
+  delay(2000);
+  Rings.move(0);
+  delay(200);
+  piston2.set_value(true);
 }
 void AWP2() {
   Clamp.move_relative(3000, 50);
@@ -53,28 +68,32 @@ void AWP2() {
   driveForward(20, autonlinear, 0, autonrotation, 50);
 }
 
-void goalCover(void *param) { piston.set_value(true); }
+
 
 void VSNUMOGO() {
   inertial.tare();
   breakAll();
   Task clamp_task(goalCover);
-  driveForwardVoltage(37, autonlinear);
+  driveForwardBump(60,autonlinear,0,skillslinear);
   piston.set_value(false);
-  delay(100);
-  driveForward(-33, skillslinear);
+  driveForward(-27, skillslinear);
   piston2.set_value(true);
   delay(800);
   holdAll();
-  FBarR.move_relative(1800, 100);
+  FBarR.move_relative(2000, 100);
   turnAngleAbs(-90, autonlinear, 3000);
   coastAll();
-  driveForward(-15, autonlinear);
+  driveForward(-15, autonlinear,0,skillslinear,600,1300);
   piston2.set_value(false);
+  FBarR.move_relative(600, 100);
   delay(500);
   Rings.move(400);
-  driveForward(20, autonlinear);
-  delay(3000);
+  turnAngleAbs(-90, autonlinear,3000);
+  driveForwardPassive(30,autonlinear,200,2000);
+  driveForward(-20,autonlinear,200);
+  delay(500);
+  driveForward(20,autonlinear,200);
+  delay(1000);
   piston2.set_value(true);
   coastAll();
 }
@@ -82,11 +101,11 @@ void VSNUMOGO() {
 void SNUMOGO() {
   inertial.tare();
   Task clamp_task(goalCover);
-  driveForward(28.5, autonlinear);
+  driveForwardBump(28.5, autonlinear,0,skillslinear);
   delay(200);
   piston.set_value(false);
   delay(100);
-  driveForward(-33, skillslinear);
+  driveForward(-27, skillslinear);
   piston2.set_value(true);
   delay(800);
   holdAll();
@@ -104,34 +123,22 @@ void SNUMOGO() {
 
 void STWOMOGO() {
   inertial.tare();
-  piston.set_value(true);
-  Clamp.move_relative(3000, 50);
-  driveForward(35, autonlinear, 0, autonrotation);
+  Task clamp_task(goalCover);
+  driveForwardBump(60, autonlinear,0,skillslinear);
   piston.set_value(false);
-  delay(100);
-  FBarR.move_absolute(1400, -100);
-  driveForward(-15, autonlinear, 0, autonrotation);
-  turnAngle(110, autonrotation);
-  delay(200);
-  driveForward(-33, autonlinear, 0, autonrotation);
-  Clamp.move_absolute(2000, -100);
-  turnAngle(10, autonrotation);
-  driveForward(55, autonlinear, 0, autonrotation);
+  driveForward(-30, skillslinear);
 }
 
 void piston_fire(void *param) {
   delay(500);
-  piston2.set_value(true);
-  delay(400);
-  piston2.set_value(false);
+  piston3.set_value(true);
   // ...
 }
 
 void wings() {
-  piston.set_value(true);
-  piston3.set_value(true);
-  driveForwardVoltage(20, autonlinear);
-  turnAngle(-40, autonrotation);
+  Task wing(piston_fire);
+  driveForwardVoltage(26, autonlinear,600,false);
+  turnAngle(-40, autonrotation,6000, false);
   driveForward(8, autonlinear);
   piston.set_value(false);
   
@@ -140,22 +147,17 @@ void wings() {
 void leftGoal() {
   inertial.tare();
   Task goal_cover(goalCover);
-  driveForward(36, autonlinear);
-  delay(100);
+  track();
   piston.set_value(false);
-  driveForward(-43, autonlinear);
-  FBarR.move_relative(400, 100);
-  piston2.set_value(true);
+  delay(100);
+  driveForward(-45, autonlinear,0,skillslinear);
+  FBarR.move_relative(1800, 100);
   holdAll();
   turnAngleAbs(-90, skillslinear,2000);
   driveForward(-10,skillslinear,200);
-  piston2.set_value(false);
-  driveForward(5,skillslinear);
-  delay(2000);
-  Rings.move(400);
-  delay(3000);
-  piston2.set_value(true);
-  turnAngle(90, autonlinear);
+  Rings.move(600);
+  delay(1500);
+  Rings.move(0);
 
 }
 
@@ -178,14 +180,14 @@ void solowinpoint() {
   turnAngle(-110, autonlinear);
 //  turnAngle(-102, autonlinear);
   Rings.move(0);
-  driveForward(12,skillslinear,200);
+  driveForward(18,skillslinear,200);
   //driveForward(27,skillslinear);
   piston.set_value(true);
   delay(200);
   driveForward(-10,skillslinear);
   FBarR.move_absolute(0, 100);
   piston2.set_value(true);
-  turnAngle(-97.5, autonlinear);
+  turnAngle(-100, autonlinear);
   driveForward(25,autonlinear);
   coastAll();
   piston.set_value(false);
@@ -252,6 +254,9 @@ void skills() {
 }
 
 void test() {
-  piston.set_value(true);
+  inertial.tare();
+  breakAll();
+  Task clamp_task(goalCover);
   track();
+  coastAll();
 }

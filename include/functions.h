@@ -1,13 +1,14 @@
 #include "../include/main.h"
 #include "../include/motorSetup.h"
 #include "pros/motors.h"
+#include "pros/rtos.h"
 
 okapi::Controller master;
 const double wheelCircumfrence = 10 * 3.25 * M_PI / 6;
 
 int selected = 0;
-std::string autons[11] = {"Disabled", "Wings",     "LeftGoal", "AWP1",
-                          "AWP2",     "VSNUMOGO", "SNUMOGO",  "S2NUMOGO",
+std::string autons[11] = {"Disabled", "Wings",     "LeftGoal", "LeftAWP",
+                          "AWP2",     "VSNUMOGO", "SNUMOGO",  "MNUMOGO",
                           "SoloWP",   "Skills",    "Test"};
 int size = 11; //*(&autons + 1) - autons;
 
@@ -91,6 +92,36 @@ double getEncoders() {
   return (FrontLeft.get_position() + FrontRight.get_position()) / 2;
 }
 
+void driveForwardPassive(double inches, pidController controller,
+                  double maxRPM = 600, double stopTime = 5000) {
+  stopDrive(false);
+  controller.resetID();
+  double initialY = ((double)getEncoders()) * (wheelCircumfrence / 900);
+  double targetY = ((double)getEncoders()) * (wheelCircumfrence / 900) + inches;
+
+  int initialT = millis();
+  controller.tVal = targetY;
+  controller.error = controller.tVal - initialY;
+  lcd::print(2, std::to_string(inertial.get_rotation()).c_str());
+  while (!controller.withinTarget() && ((millis() - initialT) <= stopTime)) {
+    controller.update(((double)getEncoders()) * wheelCircumfrence / 900);
+    drive.calculateWheelSpeeds(maxRPM * controller.calculateOut() / 600, 0,
+                               maxRPM);
+    runDriveValues();
+    delay(10);
+  }
+  FrontLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  FrontRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  MidLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  MidRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  BackLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  BackRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  FrontLeft.move_velocity(0);
+  FrontRight.move_velocity(0);
+  BackLeft.move_velocity(0);
+  BackRight.move_velocity(0);
+}
+
 void driveForward(double inches, pidController controller,
                   double maxRPM = 600) {
   stopDrive(false);
@@ -121,7 +152,56 @@ void driveForward(double inches, pidController controller,
   BackRight.move_velocity(0);
 }
 
-void driveForwardVoltage(double inches, pidController controller, double maxRPM = 600) {
+void driveForwardBump(double inches, pidController controller, double maxRPM = 600, bool stop = true) {
+  inertial.tare();
+  controller.resetID();
+  double initialY = ((double)getEncoders()) * (wheelCircumfrence / 900);
+  double targetY = ((double)getEncoders()) * (wheelCircumfrence / 900) + inches;
+  int initialT = millis();
+  controller.tVal = targetY;
+  controller.error = (controller.tVal - initialY);
+  while ((!controller.withinTarget() && (!goal.get_value() && millis()-initialT>200))&& ((millis() - initialT) <= 5000)) {
+    controller.update(((double)getEncoders()) * wheelCircumfrence / 900);
+    drive.calculateWheelSpeeds(maxRPM * 1000 * controller.calculateOut() / 600,
+                               0, maxRPM);
+    FrontLeft.move_velocity(drive.wheelFL);
+    FrontRight.move_velocity(drive.wheelFR);
+    BackLeft.move_velocity(drive.wheelBL);
+    BackRight.move_velocity(drive.wheelBR);
+    MidLeft.move_velocity(drive.wheelBL);
+    MidRight.move_velocity(drive.wheelBR);
+    delay(10);
+  }
+  if (stop){
+    stopDrive(false);
+  }
+}
+
+void driveForwardBump(double inches, pidController controller, double angle,
+                  pidController rtController, double maxRPM = 600) {
+  inertial.tare();
+  controller.resetID();
+  rtController.resetID();
+  double initialY = ((double)getEncoders()) * (wheelCircumfrence / 900);
+  double targetY = ((double)getEncoders()) * (wheelCircumfrence / 900) + inches;
+  int initialT = millis();
+  controller.tVal = targetY;
+  controller.error = controller.tVal - initialY;
+  rtController.tVal = angle;
+  double rterror = angle - inertial.get_rotation();
+  while ((!controller.withinTarget()&&!(frontDist.get()<150)) && ((millis() - initialT) <= 5000)) {
+    rtController.update(inertial.get_rotation());
+    controller.update(((double)getEncoders()) * wheelCircumfrence / 900);
+    drive.calculateWheelSpeeds(maxRPM * controller.calculateOut() / 600,
+                               5 * rtController.calculateOut(), maxRPM);
+    runDriveValues();
+    delay(10);
+  }
+  stopDrive(false);
+}
+
+
+void driveForwardVoltage(double inches, pidController controller, double maxRPM = 600, bool stop = true) {
   inertial.tare();
   controller.resetID();
   double initialY = ((double)getEncoders()) * (wheelCircumfrence / 900);
@@ -141,11 +221,13 @@ void driveForwardVoltage(double inches, pidController controller, double maxRPM 
     MidRight.move_voltage(drive.wheelBR);
     delay(10);
   }
-  stopDrive(false);
+  if (stop){
+    stopDrive(false);
+  }
 }
 
 void driveForward(double inches, pidController controller, double angle,
-                  pidController rtController, double maxRPM = 600) {
+                  pidController rtController, double maxRPM = 600, double stopTime = 5000) {
   inertial.tare();
   controller.resetID();
   rtController.resetID();
@@ -156,7 +238,7 @@ void driveForward(double inches, pidController controller, double angle,
   controller.error = controller.tVal - initialY;
   rtController.tVal = angle;
   double rterror = angle - inertial.get_rotation();
-  while ((!controller.withinTarget()) && ((millis() - initialT) <= 5000)) {
+  while ((!controller.withinTarget()) && ((millis() - initialT) <= stopTime)) {
     rtController.update(inertial.get_rotation());
     controller.update(((double)getEncoders()) * wheelCircumfrence / 900);
     drive.calculateWheelSpeeds(maxRPM * controller.calculateOut() / 600,
@@ -167,9 +249,11 @@ void driveForward(double inches, pidController controller, double angle,
   stopDrive(false);
 }
 
-void turnAngle(double angle, pidController rtController, double maxRPM = 6000) {
+void turnAngle(double angle, pidController rtController, double maxRPM = 6000,bool stop = true) {
   inertial.tare();
-  stopDrive(false);
+  if(stop){
+    stopDrive(false);
+  }
   rtController.resetID();
   int initialT = millis();
   rtController.tVal = angle;
@@ -265,10 +349,5 @@ void track() {
     std::cout << frontDist.get() << '\n';
     driverControl(600, 600);
     delay(20);
-  }
-  double backtime = millis();
-  while ((getEncoders() / 300) * 3.25 * M_PI > 10 &&
-         millis() - backtime < 2000) {
-    driverControl(-600, -600);
   }
 }
